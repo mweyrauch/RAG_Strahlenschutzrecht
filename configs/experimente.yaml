@@ -1,22 +1,14 @@
-# Variantenraster fuer scripts/experimente.py
+# Auswertung fuer scripts/experimente.py
+# Zerlegung ist fest: ein Absatz je Chunk, Titel der Vorschrift als Praefix (siehe chunking.py).
+# "dense" benoetigt pip install -e ".[dense]"; die Korpus-Embeddings werden in data/cache/
+# zwischengespeichert.
 seed: 0
 bootstrap: 2000
 tiefe: 50          # wie viele Chunks pro Frage abgerufen und fuer den Rang betrachtet werden
-ks: [1, 3, 5, 10]
+ks: [1, 5, 10]
 
-referenz:          # Basisvariante fuer gepaarte Vergleiche
-  strategie: absatz
-  kontext: titel
-  retriever: bm25
-
-raster:
-  strategien: [paragraph, absatz, fenster]
-  kontexte: [ohne, titel, gliederung]
-  retriever: [tfidf, tfidf_stem, bm25, zeichen_ngramm, lsa, hybrid]
-
-fenster:
-  woerter: 120
-  ueberlappung: 40
+referenz: bm25     # wortbasierte Basislinie fuer gepaarte Vergleiche
+retriever: [bm25, dense]
 
 antwort:
   k: 5             # Quellen im Kontext

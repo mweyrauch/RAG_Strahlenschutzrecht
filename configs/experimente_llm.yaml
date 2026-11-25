@@ -1,0 +1,16 @@
+# Naechster Schritt: Umformulierung der Anfrage durch ein Sprachmodell (lokal ausfuehren).
+# Benoetigt einen Chat-Server mit OpenAI-kompatibler Schnittstelle, z. B. Ollama:
+#   export LLM_BASE_URL=http://localhost:11434/v1 LLM_MODEL=llama3.1:8b
+#   python scripts/experimente.py --config configs/experimente_llm.yaml \
+#          --aus ergebnisse_llm --abbildungen docs/abbildungen_llm
+seed: 0
+bootstrap: 2000
+tiefe: 50
+ks: [1, 5, 10]
+
+referenz: dense
+retriever: [dense, "umformuliert:dense"]
+
+antwort:
+  k: 5
+  n_saetze: 2

@@ -1,0 +1,161 @@
+frage,item,stil,thema,rang,top_score,top_quelle,retriever
+q01-fach,q01,fach,Dosisgrenzwerte,2.0,28.66679196068663,StrlSchG § 77,bm25
+q01-alltag,q01,alltag,Dosisgrenzwerte,,9.795256731551863,StrlSchV § 125,bm25
+q02-fach,q02,fach,Dosisgrenzwerte,2.0,12.085078710731256,StrlSchG § 114,bm25
+q02-alltag,q02,alltag,Dosisgrenzwerte,,9.018287440112841,StrlSchV § 124,bm25
+q03-fach,q03,fach,Dosisgrenzwerte,5.0,17.71099188821815,StrlSchG § 139,bm25
+q03-alltag,q03,alltag,Dosisgrenzwerte,,10.793887979954285,StrlSchV Anlage 11,bm25
+q04-fach,q04,fach,Dosisgrenzwerte,1.0,32.92890603266869,StrlSchG § 78,bm25
+q04-alltag,q04,alltag,Dosisgrenzwerte,4.0,9.795256731551863,StrlSchV § 125,bm25
+q05-fach,q05,fach,Dosisgrenzwerte,1.0,29.706100643425557,StrlSchG § 78,bm25
+q05-alltag,q05,alltag,Dosisgrenzwerte,,10.050193064431935,StrlSchG § 18,bm25
+q06-fach,q06,fach,Dosisgrenzwerte,1.0,38.55952404042674,StrlSchG § 78,bm25
+q06-alltag,q06,alltag,Dosisgrenzwerte,,11.841081149505067,StrlSchV § 144,bm25
+q07-fach,q07,fach,Radon,1.0,26.637890369090563,StrlSchG § 124,bm25
+q07-alltag,q07,alltag,Radon,17.0,8.58114976838728,StrlSchG § 179,bm25
+q08-fach,q08,fach,Radon,1.0,26.887455063655842,StrlSchG § 126,bm25
+q08-alltag,q08,alltag,Radon,,6.546307747104513,StrlSchV § 1,bm25
+q09-fach,q09,fach,Radon,1.0,42.300345103106984,StrlSchG § 127,bm25
+q09-alltag,q09,alltag,Radon,14.0,7.90248106023339,StrlSchG § 163,bm25
+q10-fach,q10,fach,Radon,1.0,33.35920854480677,StrlSchV § 155,bm25
+q10-alltag,q10,alltag,Radon,,8.19017634873795,StrlSchG § 125,bm25
+q11-fach,q11,fach,Organisation,1.0,12.761074706969236,StrlSchG § 70,bm25
+q11-alltag,q11,alltag,Organisation,27.0,7.90742882179114,StrlSchG § 189,bm25
+q12-fach,q12,fach,Organisation,1.0,24.413101170148437,StrlSchG § 70,bm25
+q12-alltag,q12,alltag,Organisation,34.0,6.2267972042822555,StrlSchG § 167,bm25
+q13-fach,q13,fach,Organisation,1.0,2.779426431555522,StrlSchG § 69,bm25
+q13-alltag,q13,alltag,Organisation,,11.92622166637494,StrlSchV § 145,bm25
+q14-fach,q14,fach,Fachkunde,2.0,18.145667878580838,StrlSchG § 74,bm25
+q14-alltag,q14,alltag,Fachkunde,,0.0,StrlSchG § 1,bm25
+q15-fach,q15,fach,Unterweisung,1.0,12.385482577729466,StrlSchV § 63,bm25
+q15-alltag,q15,alltag,Unterweisung,,7.721300640792112,StrlSchV § 65,bm25
+q16-fach,q16,fach,Unterweisung,1.0,18.717041433721775,StrlSchV § 63,bm25
+q16-alltag,q16,alltag,Unterweisung,8.0,6.1151664342583185,StrlSchG § 134,bm25
+q17-fach,q17,fach,Berufliche Exposition,1.0,33.158349070255056,StrlSchV § 71,bm25
+q17-alltag,q17,alltag,Berufliche Exposition,,12.373668057504982,StrlSchV § 175,bm25
+q18-fach,q18,fach,Strahlenschutzbereiche,1.0,19.191658186649427,StrlSchV § 52,bm25
+q18-alltag,q18,alltag,Strahlenschutzbereiche,,8.661176904768338,StrlSchV § 53,bm25
+q19-fach,q19,fach,Strahlenschutzbereiche,3.0,11.913599781907262,StrlSchV § 56,bm25
+q19-alltag,q19,alltag,Strahlenschutzbereiche,4.0,16.77143639222802,StrlSchV Anlage 11,bm25
+q20-fach,q20,fach,Ärztliche Überwachung,1.0,38.2610639417112,StrlSchV § 77,bm25
+q20-alltag,q20,alltag,Ärztliche Überwachung,,7.9255333954492695,StrlSchV § 74,bm25
+q21-fach,q21,fach,Strahlenquellen,1.0,16.563745387293885,StrlSchV § 89,bm25
+q21-alltag,q21,alltag,Strahlenquellen,29.0,6.482248597722925,StrlSchV § 192,bm25
+q22-fach,q22,fach,Freigabe,1.0,17.05455562716186,StrlSchV § 31,bm25
+q22-alltag,q22,alltag,Freigabe,,11.766836881714,StrlSchV § 23,bm25
+q23-fach,q23,fach,Ordnungswidrigkeiten,1.0,25.593806185736483,StrlSchG § 194,bm25
+q23-alltag,q23,alltag,Ordnungswidrigkeiten,,10.130130240918096,StrlSchG § 117,bm25
+q24-fach,q24,fach,Notfallschutz,1.0,20.936030663074355,StrlSchG § 114,bm25
+q24-alltag,q24,alltag,Notfallschutz,,6.167908218337404,StrlSchG § 18,bm25
+q25-fach,q25,fach,Notfallschutz,1.0,32.05952309297044,StrlSchG § 93,bm25
+q25-alltag,q25,alltag,Notfallschutz,,12.916513535155559,StrlSchV § 138,bm25
+q26-fach,q26,fach,Notfallschutz,1.0,10.156250427345363,StrlSchG § 104,bm25
+q26-alltag,q26,alltag,Notfallschutz,,8.551882518000632,StrlSchG § 94,bm25
+q27-fach,q27,fach,Verlust und Fund,1.0,15.993072652032998,StrlSchV § 167,bm25
+q27-alltag,q27,alltag,Verlust und Fund,15.0,7.405505782994366,StrlSchV § 124,bm25
+q28-fach,q28,fach,Verlust und Fund,1.0,11.562685330625499,StrlSchV § 168,bm25
+q28-alltag,q28,alltag,Verlust und Fund,,7.285112860856831,StrlSchG § 196,bm25
+q29-fach,q29,fach,Kennzeichnung,1.0,24.731538167482796,StrlSchV Anlage 10,bm25
+q29-alltag,q29,alltag,Kennzeichnung,,6.2320712855652785,StrlSchG § 161,bm25
+q30-fach,q30,fach,Rechtfertigung,1.0,15.292339398267229,StrlSchV § 2,bm25
+q30-alltag,q30,alltag,Rechtfertigung,2.0,9.032238501843944,StrlSchV § 168,bm25
+q31-fach,q31,fach,Begriffe,5.0,7.888083920853301,StrlSchV § 107,bm25
+q31-alltag,q31,alltag,Begriffe,,7.748657790903585,StrlSchV § 47,bm25
+q32-fach,q32,fach,Begriffe,10.0,7.24652498821747,StrlSchV § 153,bm25
+q32-alltag,q32,alltag,Begriffe,39.0,10.932204441227821,StrlSchG § 139,bm25
+q33-fach,q33,fach,Buchführung,1.0,21.919890884496922,StrlSchV § 85,bm25
+q33-alltag,q33,alltag,Buchführung,,12.11131790629848,StrlSchV § 38,bm25
+q34-fach,q34,fach,Röntgen,12.0,10.186166449761721,StrlSchG § 20,bm25
+q34-alltag,q34,alltag,Röntgen,,7.997191687611006,StrlSchV Anlage 3,bm25
+q35-fach,q35,fach,Haftung,1.0,40.93160338773799,StrlSchG § 176,bm25
+q35-alltag,q35,alltag,Haftung,,11.249742204219011,StrlSchG § 35,bm25
+q36-fach,q36,fach,Mutterschutz,1.0,40.52622779070418,StrlSchV § 69,bm25
+q36-alltag,q36,alltag,Mutterschutz,4.0,10.26226560175006,StrlSchV § 55,bm25
+q37-fach,q37,fach,Dosisgrenzwerte,1.0,28.76576956360367,StrlSchV § 74,bm25
+q37-alltag,q37,alltag,Dosisgrenzwerte,17.0,11.069794555556147,StrlSchG § 27,bm25
+q38-fach,q38,fach,Medizin,1.0,30.64723428374193,StrlSchV § 131,bm25
+q38-alltag,q38,alltag,Medizin,,11.407240213066197,StrlSchG § 5,bm25
+q39-fach,q39,fach,Luftfahrt,1.0,21.239324161339237,StrlSchG § 50,bm25
+q39-alltag,q39,alltag,Luftfahrt,,12.11131790629848,StrlSchV § 38,bm25
+q40-fach,q40,fach,Register,1.0,20.578198465660893,StrlSchG § 170,bm25
+q40-alltag,q40,alltag,Register,11.0,9.632831459491923,StrlSchV § 111,bm25
+q01-fach,q01,fach,Dosisgrenzwerte,1.0,0.9512759447097778,StrlSchG § 78,dense
+q01-alltag,q01,alltag,Dosisgrenzwerte,,0.8632382154464722,StrlSchV § 158,dense
+q02-fach,q02,fach,Dosisgrenzwerte,1.0,0.9000449180603027,StrlSchG § 77,dense
+q02-alltag,q02,alltag,Dosisgrenzwerte,12.0,0.8568224310874939,StrlSchG § 35,dense
+q03-fach,q03,fach,Dosisgrenzwerte,3.0,0.9121615886688232,StrlSchG § 78,dense
+q03-alltag,q03,alltag,Dosisgrenzwerte,,0.8576293587684631,StrlSchV Anlage 11,dense
+q04-fach,q04,fach,Dosisgrenzwerte,1.0,0.9470582008361816,StrlSchG § 78,dense
+q04-alltag,q04,alltag,Dosisgrenzwerte,3.0,0.8792380690574646,StrlSchV § 68,dense
+q05-fach,q05,fach,Dosisgrenzwerte,1.0,0.9328135848045349,StrlSchG § 78,dense
+q05-alltag,q05,alltag,Dosisgrenzwerte,2.0,0.8698873519897461,StrlSchV § 70,dense
+q06-fach,q06,fach,Dosisgrenzwerte,1.0,0.9114090204238892,StrlSchG § 78,dense
+q06-alltag,q06,alltag,Dosisgrenzwerte,4.0,0.8668423891067505,StrlSchV § 55,dense
+q07-fach,q07,fach,Radon,1.0,0.9215272665023804,StrlSchG § 124,dense
+q07-alltag,q07,alltag,Radon,4.0,0.8678234815597534,StrlSchG § 127,dense
+q08-fach,q08,fach,Radon,1.0,0.9274442195892334,StrlSchG § 126,dense
+q08-alltag,q08,alltag,Radon,4.0,0.8330298066139221,StrlSchG § 127,dense
+q09-fach,q09,fach,Radon,1.0,0.9348623752593994,StrlSchG § 127,dense
+q09-alltag,q09,alltag,Radon,1.0,0.8840391635894775,StrlSchG § 127,dense
+q10-fach,q10,fach,Radon,1.0,0.9154220819473267,StrlSchV § 155,dense
+q10-alltag,q10,alltag,Radon,1.0,0.8803342580795288,StrlSchV § 155,dense
+q11-fach,q11,fach,Organisation,1.0,0.9180147051811218,StrlSchG § 70,dense
+q11-alltag,q11,alltag,Organisation,3.0,0.901663601398468,StrlSchV § 74,dense
+q12-fach,q12,fach,Organisation,1.0,0.9293285608291626,StrlSchG § 70,dense
+q12-alltag,q12,alltag,Organisation,1.0,0.8718981742858887,StrlSchG § 70,dense
+q13-fach,q13,fach,Organisation,1.0,0.9142668843269348,StrlSchG § 69,dense
+q13-alltag,q13,alltag,Organisation,9.0,0.869525671005249,StrlSchV § 106,dense
+q14-fach,q14,fach,Fachkunde,1.0,0.942560076713562,StrlSchV § 48,dense
+q14-alltag,q14,alltag,Fachkunde,2.0,0.8938343524932861,StrlSchV § 47,dense
+q15-fach,q15,fach,Unterweisung,1.0,0.9115010499954224,StrlSchV § 63,dense
+q15-alltag,q15,alltag,Unterweisung,27.0,0.8709646463394165,StrlSchV § 87,dense
+q16-fach,q16,fach,Unterweisung,1.0,0.9026007056236267,StrlSchV § 63,dense
+q16-alltag,q16,alltag,Unterweisung,2.0,0.8506025075912476,StrlSchG § 31b,dense
+q17-fach,q17,fach,Berufliche Exposition,3.0,0.914222002029419,StrlSchG § 77,dense
+q17-alltag,q17,alltag,Berufliche Exposition,,0.8696679472923279,StrlSchV § 68,dense
+q18-fach,q18,fach,Strahlenschutzbereiche,2.0,0.8772166967391968,StrlSchG § 78,dense
+q18-alltag,q18,alltag,Strahlenschutzbereiche,5.0,0.8625155687332153,StrlSchV § 53,dense
+q19-fach,q19,fach,Strahlenschutzbereiche,3.0,0.8703933954238892,StrlSchV § 56,dense
+q19-alltag,q19,alltag,Strahlenschutzbereiche,1.0,0.8898870944976807,StrlSchV § 52,dense
+q20-fach,q20,fach,Ärztliche Überwachung,1.0,0.9194046258926392,StrlSchV § 77,dense
+q20-alltag,q20,alltag,Ärztliche Überwachung,11.0,0.874334454536438,StrlSchV § 158,dense
+q21-fach,q21,fach,Strahlenquellen,1.0,0.9313362836837769,StrlSchV § 89,dense
+q21-alltag,q21,alltag,Strahlenquellen,1.0,0.8860944509506226,StrlSchV § 89,dense
+q22-fach,q22,fach,Freigabe,1.0,0.9384345412254333,StrlSchV § 31,dense
+q22-alltag,q22,alltag,Freigabe,,0.8683565855026245,StrlSchV § 94,dense
+q23-fach,q23,fach,Ordnungswidrigkeiten,1.0,0.896750807762146,StrlSchG § 194,dense
+q23-alltag,q23,alltag,Ordnungswidrigkeiten,,0.8486311435699463,StrlSchG § 57,dense
+q24-fach,q24,fach,Notfallschutz,1.0,0.9068689346313477,StrlSchG § 114,dense
+q24-alltag,q24,alltag,Notfallschutz,,0.8573944568634033,StrlSchV § 152,dense
+q25-fach,q25,fach,Notfallschutz,1.0,0.9234892129898071,StrlSchG § 93,dense
+q25-alltag,q25,alltag,Notfallschutz,12.0,0.8584230542182922,StrlSchG Anlage 4,dense
+q26-fach,q26,fach,Notfallschutz,1.0,0.9000385403633118,StrlSchG § 104,dense
+q26-alltag,q26,alltag,Notfallschutz,7.0,0.8315635919570923,StrlSchG § 94,dense
+q27-fach,q27,fach,Verlust und Fund,1.0,0.8801255226135254,StrlSchV § 167,dense
+q27-alltag,q27,alltag,Verlust und Fund,,0.8574585318565369,StrlSchG § 142,dense
+q28-fach,q28,fach,Verlust und Fund,2.0,0.8959692716598511,StrlSchV § 64,dense
+q28-alltag,q28,alltag,Verlust und Fund,,0.84368896484375,StrlSchV § 57,dense
+q29-fach,q29,fach,Kennzeichnung,1.0,0.8807782530784607,StrlSchV Anlage 10,dense
+q29-alltag,q29,alltag,Kennzeichnung,,0.8265991806983948,StrlSchV Anlage 11,dense
+q30-fach,q30,fach,Rechtfertigung,20.0,0.8940021991729736,StrlSchV § 82,dense
+q30-alltag,q30,alltag,Rechtfertigung,1.0,0.8731136322021484,StrlSchV Anlage 1,dense
+q31-fach,q31,fach,Begriffe,1.0,0.8930885791778564,StrlSchG § 5,dense
+q31-alltag,q31,alltag,Begriffe,1.0,0.874535858631134,StrlSchG § 5,dense
+q32-fach,q32,fach,Begriffe,2.0,0.8943008184432983,StrlSchV § 122,dense
+q32-alltag,q32,alltag,Begriffe,,0.8804361820220947,StrlSchV § 74,dense
+q33-fach,q33,fach,Buchführung,1.0,0.8942465782165527,StrlSchV § 85,dense
+q33-alltag,q33,alltag,Buchführung,,0.8616799116134644,StrlSchV § 191,dense
+q34-fach,q34,fach,Röntgen,3.0,0.8901151418685913,StrlSchG § 19,dense
+q34-alltag,q34,alltag,Röntgen,1.0,0.8532366752624512,StrlSchV § 60,dense
+q35-fach,q35,fach,Haftung,1.0,0.921370267868042,StrlSchG § 176,dense
+q35-alltag,q35,alltag,Haftung,10.0,0.8765546083450317,StrlSchG § 35,dense
+q36-fach,q36,fach,Mutterschutz,1.0,0.9067330956459045,StrlSchV § 69,dense
+q36-alltag,q36,alltag,Mutterschutz,12.0,0.8326807618141174,StrlSchV § 55,dense
+q37-fach,q37,fach,Dosisgrenzwerte,2.0,0.9134161472320557,StrlSchG § 77,dense
+q37-alltag,q37,alltag,Dosisgrenzwerte,,0.8524914979934692,StrlSchG § 35,dense
+q38-fach,q38,fach,Medizin,1.0,0.89054274559021,StrlSchV § 131,dense
+q38-alltag,q38,alltag,Medizin,2.0,0.8849148750305176,StrlSchG § 5,dense
+q39-fach,q39,fach,Luftfahrt,1.0,0.8953638672828674,StrlSchG § 50,dense
+q39-alltag,q39,alltag,Luftfahrt,7.0,0.851661205291748,StrlSchG § 51,dense
+q40-fach,q40,fach,Register,1.0,0.9075872898101807,StrlSchG § 170,dense
+q40-alltag,q40,alltag,Register,8.0,0.8474429249763489,StrlSchV § 130,dense

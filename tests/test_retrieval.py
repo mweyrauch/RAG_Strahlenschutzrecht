@@ -7,12 +7,11 @@ from strlrag.retrieval import BM25Retriever, baue_retriever
 
 @pytest.fixture
 def chunks(korpus):
-    return zerlege(korpus, "absatz", "titel")
+    return zerlege(korpus)
 
 
-@pytest.mark.parametrize("name", ["tfidf", "tfidf_stem", "zeichen_ngramm", "bm25", "hybrid"])
-def test_findet_offensichtliche_stelle(chunks, name):
-    r = baue_retriever(name).fit(chunks)
+def test_bm25_findet_offensichtliche_stelle(chunks):
+    r = baue_retriever("bm25").fit(chunks)
     t = r.suche("Wie oft muss eine sachkundige Person pr\u00fcfen?", k=3)
     assert t[0].chunk.schluessel == "TestG \u00a7 2"
     assert len(t) == 3
@@ -21,13 +20,10 @@ def test_findet_offensichtliche_stelle(chunks, name):
 
 def test_stemming_hilft_bei_flexion(chunks):
     # "Bestellungen" steht so nicht im Text, nur "Bestellung"/"bestellen"
-    mit = baue_retriever("tfidf_stem").fit(chunks).suche("Bestellungen anzeigen", 1)[0]
+    mit = baue_retriever("bm25").fit(chunks).suche("Bestellungen anzeigen", 1)[0]
+    ohne = BM25Retriever(stemming=False).fit(chunks).suche("Bestellungen anzeigen", 1)[0]
     assert mit.chunk.schluessel == "TestG \u00a7 4"
-
-
-def test_zeichen_ngramme_finden_kompositum_teile(chunks):
-    t = baue_retriever("zeichen_ngramm").fit(chunks).suche("Temperatur", 1)[0]
-    assert t.chunk.schluessel == "TestG Anlage 1"
+    assert ohne.score < mit.score
 
 
 def test_bm25_gegen_handrechnung():
@@ -53,18 +49,6 @@ def test_unbekannter_retriever():
         baue_retriever("gibtsnicht")
 
 
-def test_lsa_liefert_scores(chunks):
-    r = baue_retriever("lsa", komponenten=5).fit(chunks)
-    t = r.suche("sachkundige Person pr\u00fcfen", 3)
-    assert len(t) == 3 and -1.0 - 1e-9 <= t[0].score <= 1.0 + 1e-9
-
-
-def test_hybrid_mit_eigenen_teilen(chunks):
-    r = baue_retriever("hybrid:bm25+tfidf").fit(chunks)
-    assert r.name == "hybrid:bm25+tfidf"
-    assert r.suche("sachkundige Person", 1)[0].chunk.schluessel == "TestG \u00a7 2"
-
-
 def test_umformulierung_hilft_bei_fremdem_vokabular(chunks):
     from strlrag.anfrage import UmformulierRetriever
     from strlrag.antwort import MockBackend
@@ -76,3 +60,52 @@ def test_umformulierung_hilft_bei_fremdem_vokabular(chunks):
     assert mock.letzte_nachrichten[1]["content"] == frage
     r.suche(frage, 1)
     assert list(r.cache) == [frage]  # zweiter Aufruf aus dem Cache
+
+
+class _FakeModell:
+    """Ersetzt SentenceTransformer: Buchstabenhaeufigkeiten als 'Embedding'."""
+
+    aufrufe = 0
+
+    def __init__(self, name):
+        self.name = name
+
+    def encode(self, texte, normalize_embeddings=True, **kw):
+        _FakeModell.aufrufe += 1
+        m = np.zeros((len(texte), 26))
+        for i, t in enumerate(texte):
+            for ch in t.lower():
+                if "a" <= ch <= "z":
+                    m[i, ord(ch) - 97] += 1
+        if normalize_embeddings:
+            m /= np.maximum(np.linalg.norm(m, axis=1, keepdims=True), 1e-12)
+        return m
+
+
+@pytest.fixture
+def fake_st(monkeypatch):
+    import sys
+    import types
+    modul = types.ModuleType("sentence_transformers")
+    modul.SentenceTransformer = _FakeModell
+    monkeypatch.setitem(sys.modules, "sentence_transformers", modul)
+    _FakeModell.aufrufe = 0
+    return _FakeModell
+
+
+def test_dense_mit_cache(chunks, fake_st, tmp_path):
+    r = baue_retriever("dense", cache_dir=tmp_path).fit(chunks)
+    assert r.frage_praefix == "query: " and r.text_praefix == "passage: "
+    t = r.suche("Temperaturmessung Kelvin", 3)
+    assert len(t) == 3 and t[0].score >= t[1].score
+    assert len(list(tmp_path.glob("emb_*.npy"))) == 1
+    vorher = fake_st.aufrufe
+    r2 = baue_retriever("dense", cache_dir=tmp_path).fit(chunks)  # Korpus aus dem Cache
+    assert fake_st.aufrufe == vorher
+    np.testing.assert_allclose(r2.matrix, r.matrix)
+
+
+def test_dense_modellname_und_praefix(fake_st, tmp_path):
+    r = baue_retriever("dense:sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+                       cache_dir=tmp_path)
+    assert r.name.startswith("dense:") and r.frage_praefix == "" and r.text_praefix == ""

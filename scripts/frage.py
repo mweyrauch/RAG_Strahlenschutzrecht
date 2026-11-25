@@ -4,6 +4,7 @@ Beispiele:
   python scripts/frage.py "Wie oft ist die Unterweisung zu wiederholen?"
   python scripts/frage.py --backend llm "Welche Grenzwerte gelten fuer Auszubildende?"
   python scripts/frage.py --nur-quellen -k 10 "Radon im Keller"
+  python scripts/frage.py --retriever bm25 "Wie oft ist die Unterweisung zu wiederholen?"
 
 --backend llm nutzt einen Chat-Server mit OpenAI-kompatibler Schnittstelle
 (Standard: Ollama unter http://localhost:11434/v1; siehe LLM_BASE_URL, LLM_MODEL, LLM_API_KEY).
@@ -24,9 +25,7 @@ from strlrag.retrieval import baue_retriever  # noqa: E402
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("frage")
-    ap.add_argument("--retriever", default="hybrid")
-    ap.add_argument("--strategie", default="absatz")
-    ap.add_argument("--kontext", default="titel")
+    ap.add_argument("--retriever", default="dense", help="dense (Embeddings) oder bm25")
     ap.add_argument("-k", type=int, default=5)
     ap.add_argument("--backend", choices=["extraktiv", "llm"], default="extraktiv")
     ap.add_argument("--min-score", type=float, default=None,
@@ -34,7 +33,7 @@ def main():
     ap.add_argument("--nur-quellen", action="store_true")
     args = ap.parse_args()
 
-    ret = baue_retriever(args.retriever).fit(zerlege(standardkorpus(), args.strategie, args.kontext))
+    ret = baue_retriever(args.retriever).fit(zerlege(standardkorpus()))
     if args.nur_quellen:
         for i, t in enumerate(ret.suche(args.frage, args.k), start=1):
             print(f"[{i}] {t.score:.3f}  {t.chunk.quelle}\n    {t.chunk.text[:200]}")

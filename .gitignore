@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 # Rohdaten werden per scripts/lade_korpus.py geladen und nicht versioniert
 data/roh/
+# Zwischengespeicherte Embeddings
+data/cache/

@@ -5,25 +5,25 @@ Alle Retriever implementieren:
     suche(frage, k)      -> list[Treffer] (absteigend nach Score)
 
 Enthalten:
-- TfidfRetriever       Wort-TF-IDF, optional mit CISTEM-Stemming
-- ZeichenRetriever     TF-IDF auf Zeichen-n-Grammen (robust gegen Komposita)
-- BM25Retriever        Okapi BM25 auf Wort-Tokens
-- LsaRetriever         Latent Semantic Analysis (TF-IDF + SVD)
-- HybridRetriever      Reciprocal Rank Fusion mehrerer Retriever
-- DenseRetriever       Satz-Embeddings ueber sentence-transformers (optional,
-                       in dieser Umgebung nicht getestet)
+- DenseRetriever       Satz-Embeddings ueber sentence-transformers (Haupt-Retriever)
+- BM25Retriever        Okapi BM25 auf Wort-Tokens mit CISTEM-Stemming (Basislinie zum Vergleich)
 """
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 from scipy import sparse
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 
 from .chunking import Chunk
-from .text import Analysator, falte
+from .text import Analysator
+
+# Zwischenspeicher fuer Embeddings (nicht versioniert, siehe .gitignore)
+_CACHE = Path(__file__).resolve().parents[2] / "data" / "cache"
 
 
 @dataclass(frozen=True)
@@ -57,37 +57,6 @@ class Retriever:
         return [Treffer(int(i), float(s[i]), self.chunks[i]) for i in idx]
 
 
-class TfidfRetriever(Retriever):
-    def __init__(self, stemming: bool = True, sublinear_tf: bool = True):
-        self.stemming = stemming
-        self.sublinear_tf = sublinear_tf
-        self.name = "tfidf_stem" if stemming else "tfidf"
-
-    def _fit(self, texte):
-        self.vec = TfidfVectorizer(analyzer=Analysator(stemming=self.stemming),
-                                   sublinear_tf=self.sublinear_tf, norm="l2")
-        self.matrix = self.vec.fit_transform(texte)
-
-    def scores(self, frage):
-        q = self.vec.transform([frage])
-        return (self.matrix @ q.T).toarray().ravel()
-
-
-class ZeichenRetriever(Retriever):
-    def __init__(self, ngram: tuple[int, int] = (3, 5)):
-        self.ngram = ngram
-        self.name = "zeichen_ngramm"
-
-    def _fit(self, texte):
-        self.vec = TfidfVectorizer(analyzer="char_wb", ngram_range=self.ngram,
-                                   preprocessor=falte, sublinear_tf=True, min_df=2)
-        self.matrix = self.vec.fit_transform(texte)
-
-    def scores(self, frage):
-        q = self.vec.transform([frage])
-        return (self.matrix @ q.T).toarray().ravel()
-
-
 class BM25Retriever(Retriever):
     def __init__(self, k1: float = 1.2, b: float = 0.75, stemming: bool = True):
         self.k1 = k1
@@ -115,72 +84,35 @@ class BM25Retriever(Retriever):
         return (self.matrix @ q.T).toarray().ravel()
 
 
-class LsaRetriever(Retriever):
-    """Latent Semantic Analysis: TF-IDF (mit Stemming) -> abgeschnittene SVD -> Kosinus.
-
-    Eine einfache dichte Repraesentation, die nur aus dem Korpus selbst gelernt wird
-    und ohne zusaetzliche Pakete auskommt.
-    """
-
-    def __init__(self, komponenten: int = 200, seed: int = 0):
-        self.komponenten = komponenten
-        self.seed = seed
-        self.name = "lsa"
-
-    def _fit(self, texte):
-        from sklearn.decomposition import TruncatedSVD
-        from sklearn.preprocessing import normalize
-
-        self._normalize = normalize
-        self.vec = TfidfVectorizer(analyzer=Analysator(stemming=True), sublinear_tf=True, min_df=2)
-        x = self.vec.fit_transform(texte)
-        k = max(1, min(self.komponenten, x.shape[0] - 1, x.shape[1] - 1))
-        self.svd = TruncatedSVD(n_components=k, random_state=self.seed)
-        self.matrix = normalize(self.svd.fit_transform(x))
-
-    def scores(self, frage):
-        q = self._normalize(self.svd.transform(self.vec.transform([frage])))
-        return (self.matrix @ q[0]).astype(float)
-
-
-class HybridRetriever(Retriever):
-    """Reciprocal Rank Fusion (Cormack et al. 2009): score = sum 1 / (k_rrf + rang)."""
-
-    def __init__(self, retriever: list[Retriever], k_rrf: int = 60, tiefe: int = 100):
-        self.retriever = retriever
-        self.k_rrf = k_rrf
-        self.tiefe = tiefe
-        self.name = "hybrid(" + "+".join(r.name for r in retriever) + ")"
-
-    def fit(self, chunks):
-        self.chunks = list(chunks)
-        for r in self.retriever:
-            r.fit(self.chunks)
-        return self
-
-    def scores(self, frage):
-        gesamt = np.zeros(len(self.chunks))
-        for r in self.retriever:
-            for rang, t in enumerate(r.suche(frage, self.tiefe), start=1):
-                if t.score > 0:  # Treffer ohne jede Uebereinstimmung nicht mitzaehlen
-                    gesamt[t.index] += 1.0 / (self.k_rrf + rang)
-        return gesamt
-
-
 class DenseRetriever(Retriever):
     """Embedding-Retriever. Benoetigt das Paket sentence-transformers.
 
-    Standardmodell: intfloat/multilingual-e5-small (erwartet die Praefixe
-    "query: " und "passage: "). Nicht in CI und nicht in der Entwicklungs-
-    umgebung getestet, da das Paket dort nicht installierbar war.
+    Standardmodell: intfloat/multilingual-e5-small. E5-Modelle erwarten die Praefixe
+    "query: " und "passage: "; fuer andere Modelle bleiben sie leer, sofern nicht
+    ausdruecklich angegeben. Die Embeddings des Korpus werden in cache_dir
+    zwischengespeichert (Schluessel: Modell, Praefix und alle Texte), damit wiederholte Laeufe
+    den Korpus nicht erneut kodieren.
     """
 
     def __init__(self, modell: str = "intfloat/multilingual-e5-small",
-                 frage_praefix: str = "query: ", text_praefix: str = "passage: "):
+                 frage_praefix: str | None = None, text_praefix: str | None = None,
+                 cache_dir: str | Path | None = None, batch_size: int = 32):
+        e5 = "e5" in modell.lower()
         self.modell_name = modell
-        self.frage_praefix = frage_praefix
-        self.text_praefix = text_praefix
-        self.name = "dense"
+        self.frage_praefix = frage_praefix if frage_praefix is not None else ("query: " if e5 else "")
+        self.text_praefix = text_praefix if text_praefix is not None else ("passage: " if e5 else "")
+        self.cache_dir = Path(cache_dir) if cache_dir else None
+        self.batch_size = batch_size
+        self.name = "dense" if modell == "intfloat/multilingual-e5-small" else f"dense:{modell}"
+
+    def _cache_pfad(self, texte: list[str]) -> Path | None:
+        if self.cache_dir is None:
+            return None
+        h = hashlib.sha256()
+        for teil in [self.modell_name, self.text_praefix, *texte]:
+            h.update(teil.encode("utf-8"))
+            h.update(b"\x00")
+        return self.cache_dir / f"emb_{h.hexdigest()[:20]}.npy"
 
     def _fit(self, texte):
         try:
@@ -190,34 +122,32 @@ class DenseRetriever(Retriever):
                 "DenseRetriever benoetigt 'sentence-transformers' "
                 "(pip install -e '.[dense]')") from e
         self.modell = SentenceTransformer(self.modell_name)
-        self.matrix = self.modell.encode([self.text_praefix + t for t in texte],
-                                         normalize_embeddings=True, show_progress_bar=False)
+        pfad = self._cache_pfad(texte)
+        if pfad is not None and pfad.exists():
+            self.matrix = np.load(pfad)
+            return
+        self.matrix = np.asarray(self.modell.encode(
+            [self.text_praefix + t for t in texte], batch_size=self.batch_size,
+            normalize_embeddings=True, show_progress_bar=True), dtype=np.float32)
+        if pfad is not None:
+            pfad.parent.mkdir(parents=True, exist_ok=True)
+            np.save(pfad, self.matrix)
 
     def scores(self, frage):
-        q = self.modell.encode([self.frage_praefix + frage], normalize_embeddings=True)
+        q = np.asarray(self.modell.encode([self.frage_praefix + frage], normalize_embeddings=True))
         return (self.matrix @ q[0]).astype(float)
 
 
 def baue_retriever(name: str, **kw) -> Retriever:
     """Fabrik fuer die Konfigurationsdateien."""
-    if name == "tfidf":
-        return TfidfRetriever(stemming=False)
-    if name == "tfidf_stem":
-        return TfidfRetriever(stemming=True)
-    if name == "zeichen_ngramm":
-        return ZeichenRetriever()
     if name == "bm25":
         return BM25Retriever(**kw)
-    if name == "lsa":
-        return LsaRetriever(**kw)
-    if name == "hybrid":
-        teile = kw.get("teile", ["bm25", "zeichen_ngramm"])
-        return HybridRetriever([baue_retriever(t) for t in teile])
-    if name.startswith("hybrid:"):
-        # z. B. "hybrid:bm25+dense"
-        r = HybridRetriever([baue_retriever(t) for t in name.split(":", 1)[1].split("+")])
-        r.name = name
-        return r
+    if name == "dense" or name.startswith("dense:"):
+        # z. B. "dense" oder "dense:intfloat/multilingual-e5-base"
+        if ":" in name:
+            kw.setdefault("modell", name.split(":", 1)[1])
+        kw.setdefault("cache_dir", _CACHE)
+        return DenseRetriever(**kw)
     if name.startswith("umformuliert:"):
         # z. B. "umformuliert:bm25": Anfrage zusaetzlich von einem Sprachmodell umformulieren lassen
         from .anfrage import UmformulierRetriever
@@ -225,6 +155,4 @@ def baue_retriever(name: str, **kw) -> Retriever:
         r = UmformulierRetriever(baue_retriever(name.split(":", 1)[1]), OpenAIKompatibelBackend())
         r.name = name
         return r
-    if name == "dense":
-        return DenseRetriever(**kw)
     raise ValueError(f"Unbekannter Retriever: {name}")

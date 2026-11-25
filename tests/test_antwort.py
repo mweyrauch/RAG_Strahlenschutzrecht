@@ -8,7 +8,7 @@ from strlrag.retrieval import baue_retriever
 
 @pytest.fixture
 def retriever(korpus):
-    return baue_retriever("bm25").fit(zerlege(korpus, "absatz", "titel"))
+    return baue_retriever("bm25").fit(zerlege(korpus))
 
 
 def test_extraktiv_zitiert_richtige_quelle(retriever):
