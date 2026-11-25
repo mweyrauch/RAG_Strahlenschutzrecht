@@ -1,0 +1,6 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+# Rohdaten werden per scripts/lade_korpus.py geladen und nicht versioniert
+data/roh/

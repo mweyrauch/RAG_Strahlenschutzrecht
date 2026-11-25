@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetisches Testgesetz im Format von gesetze-im-internet.de. Inhalt frei erfunden. -->
+<dokumente builddate="20260101000000" doknr="BJNR000000000">
+  <norm builddate="20260101000000" doknr="BJNR000000000">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <langue>Gesetz zur Erprobung von Werkzeugen</langue>
+    </metadaten>
+    <textdaten><text format="XML"><Content><P>Mantel</P></Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000001">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>Inhaltsübersicht</enbez>
+    </metadaten>
+    <textdaten><text format="XML"><Content><P>§ 1 Zweck</P></Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000002">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <gliederungseinheit>
+        <gliederungskennzahl>010</gliederungskennzahl>
+        <gliederungsbez>Teil 1</gliederungsbez>
+        <gliederungstitel>Allgemeines</gliederungstitel>
+      </gliederungseinheit>
+    </metadaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000003">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>§ 1</enbez>
+      <titel format="parat">Zweck</titel>
+    </metadaten>
+    <textdaten><text format="XML"><Content>
+      <P>(1) Dieses Gesetz regelt den Umgang mit Messgeräten in Werkstätten.</P>
+      <P>(2) Es gilt nicht für Messgeräte im Haushalt.</P>
+    </Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000004">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <gliederungseinheit>
+        <gliederungskennzahl>020</gliederungskennzahl>
+        <gliederungsbez>Teil 2</gliederungsbez>
+        <gliederungstitel>Pflichten</gliederungstitel>
+      </gliederungseinheit>
+    </metadaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000005">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <gliederungseinheit>
+        <gliederungskennzahl>020010</gliederungskennzahl>
+        <gliederungsbez>Abschnitt 1</gliederungsbez>
+        <gliederungstitel>Prüfung</gliederungstitel>
+      </gliederungseinheit>
+    </metadaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000006">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>§  2</enbez>
+      <titel format="parat">Prüfintervall</titel>
+    </metadaten>
+    <textdaten><text format="XML"><Content>
+      <P>(1) Messgeräte sind mindestens alle zwölf Monate durch eine sachkundige Person zu prüfen.</P>
+      <P>(2) Die Prüfung umfasst
+        <DL Font="normal" Type="arabic">
+          <DT>1.</DT><DD Font="normal"><LA Size="normal">die Sichtprüfung des Gehäuses,</LA></DD>
+          <DT>2.</DT><DD Font="normal"><LA Size="normal">die Kalibrierung nach Abs. 3 Nr. 1.</LA></DD>
+        </DL>
+      </P>
+      <P>(3) Das Ergebnis ist schriftlich festzuhalten und fünf Jahre aufzubewahren.</P>
+    </Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000007">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>§ 3</enbez>
+    </metadaten>
+    <textdaten><text format="XML"><Content><P>(weggefallen)</P></Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000008">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>§ 4</enbez>
+      <titel format="parat">Beauftragte Person</titel>
+    </metadaten>
+    <textdaten><text format="XML"><Content>
+      <P>Der Betreiber hat eine beauftragte Person für die Gerätesicherheit schriftlich zu bestellen. Die Bestellung ist der Behörde anzuzeigen.</P>
+    </Content></text></textdaten>
+  </norm>
+  <norm builddate="20260101000000" doknr="BJNR000000009">
+    <metadaten>
+      <jurabk>TestG</jurabk>
+      <enbez>Anlage 1</enbez>
+      <titel format="parat">Grenzwerte für Messabweichungen</titel>
+    </metadaten>
+    <textdaten><text format="XML"><Content>
+      <table><tgroup cols="2"><tbody>
+        <row><entry>Längenmessung</entry><entry>0,5 Prozent</entry></row>
+        <row><entry>Temperaturmessung</entry><entry>2 Kelvin</entry></row>
+      </tbody></tgroup></table>
+    </Content></text></textdaten>
+  </norm>
+</dokumente>

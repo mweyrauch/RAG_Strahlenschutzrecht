@@ -1,0 +1,313 @@
+# Evaluationsfragen zum Strahlenschutzgesetz (StrlSchG) und zur Strahlenschutzverordnung (StrlSchV)
+#
+# Jedes Item hat zwei Formulierungen:
+#   fach:   nah am Wortlaut des Gesetzes (geschrieben nach Lektüre der Vorschrift)
+#   alltag: so, wie eine fachfremde Person fragen würde, bewusst ohne die Begriffe der Vorschrift
+# soll:       Vorschriften, in denen die Antwort steht (Paragraphenebene, Bezeichnung wie im Korpus)
+# stichworte: kurze Textstellen, die eine korrekte Antwort enthalten muss (wörtlich aus der Vorschrift)
+#
+# Stand der Prüfung: Soll-Vorschriften und Stichworte wurden gegen die XML-Fassung von
+# gesetze-im-internet.de geprüft (StrlSchG Stand 02.11.2026, StrlSchV Stand 05.08.2025);
+# scripts/pruefe_fragen.py prüft automatisch, ob jedes Stichwort in einer Soll-Vorschrift steht.
+# Die Auswahl ist klein (40 Items) und von einer Person erstellt; sie ist nicht repräsentativ
+# für reale Nutzerfragen.
+
+fragen:
+  - id: q01
+    thema: Dosisgrenzwerte
+    fach: Wie hoch ist der Grenzwert der effektiven Dosis für beruflich exponierte Personen im Kalenderjahr?
+    alltag: Wie viel Strahlung darf ich als Beschäftigter pro Jahr höchstens abbekommen?
+    soll: [StrlSchG § 78]
+    stichworte: [20 Millisievert im Kalenderjahr]
+
+  - id: q02
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert gilt für die Berufslebensdosis?
+    alltag: Wie viel Strahlung darf man über das ganze Arbeitsleben zusammengerechnet bekommen?
+    soll: [StrlSchG § 77]
+    stichworte: [400 Millisievert]
+
+  - id: q03
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert der effektiven Dosis gilt für Einzelpersonen der Bevölkerung?
+    alltag: Wie viel zusätzliche Strahlung aus einer Anlage in der Nachbarschaft darf ein Anwohner pro Jahr abbekommen?
+    soll: [StrlSchG § 80]
+    stichworte: [1 Millisievert im Kalenderjahr]
+
+  - id: q04
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert der Organ-Äquivalentdosis gilt für die Augenlinse beruflich exponierter Personen?
+    alltag: Wie viel Strahlung dürfen meine Augen bei der Arbeit pro Jahr abbekommen?
+    soll: [StrlSchG § 78]
+    stichworte: [für die Augenlinse 20 Millisievert]
+
+  - id: q05
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert der effektiven Dosis gilt für beruflich exponierte Personen unter 18 Jahren?
+    alltag: Wie viel Strahlung darf ein 17-jähriger Azubi im Jahr abbekommen?
+    soll: [StrlSchG § 78]
+    stichworte: [unter 18 Jahren beträgt der Grenzwert der effektiven Dosis 1 Millisievert]
+
+  - id: q06
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert gilt für ein ungeborenes Kind, das auf Grund der Beschäftigung der Mutter exponiert ist?
+    alltag: Ich bin schwanger und arbeite mit Strahlung. Wie viel darf mein Baby abbekommen?
+    soll: [StrlSchG § 78]
+    stichworte: [bis zu deren Ende 1 Millisievert]
+
+  - id: q07
+    thema: Radon
+    fach: Welcher Referenzwert gilt für die Radon-222-Aktivitätskonzentration in Aufenthaltsräumen?
+    alltag: Ab wie viel Radon in meiner Wohnung sollte ich etwas unternehmen?
+    soll: [StrlSchG § 124]
+    stichworte: [300 Becquerel je Kubikmeter]
+
+  - id: q08
+    thema: Radon
+    fach: Welcher Referenzwert gilt für die Radon-222-Aktivitätskonzentration an Arbeitsplätzen?
+    alltag: Wie viel von dem Gas aus dem Boden ist in einem Kellerbüro noch in Ordnung?
+    soll: [StrlSchG § 126]
+    stichworte: [300 Becquerel je Kubikmeter]
+
+  - id: q09
+    thema: Radon
+    fach: Wann muss der Verantwortliche für einen Arbeitsplatz in einem Innenraum Messungen der Radon-222-Aktivitätskonzentration veranlassen?
+    alltag: Muss mein Chef im Kellerbüro messen lassen, ob dort zu viel Radon ist?
+    soll: [StrlSchG § 127]
+    stichworte: [18 Monaten]
+
+  - id: q10
+    thema: Radon
+    fach: Über welche Gesamtdauer sind Messungen der Radon-222-Aktivitätskonzentration durchzuführen?
+    alltag: Wie lange dauert so eine Radonmessung?
+    soll: [StrlSchV § 155]
+    stichworte: [Gesamtdauer von zwölf Monaten]
+
+  - id: q11
+    thema: Organisation
+    fach: In welcher Form hat der Strahlenschutzverantwortliche Strahlenschutzbeauftragte zu bestellen?
+    alltag: Wie wird man offiziell zur Person, die im Betrieb auf den Strahlenschutz aufpasst?
+    soll: [StrlSchG § 70]
+    stichworte: [unverzüglich schriftlich zu bestellen]
+
+  - id: q12
+    thema: Organisation
+    fach: Ist die Kündigung des Arbeitsverhältnisses eines Strahlenschutzbeauftragten zulässig?
+    alltag: Kann mich mein Arbeitgeber rauswerfen, weil ich beim Strahlenschutz zu streng bin?
+    soll: [StrlSchG § 70]
+    stichworte: [Kündigung des Arbeitsverhältnisses unzulässig]
+
+  - id: q13
+    thema: Organisation
+    fach: Wer ist Strahlenschutzverantwortlicher?
+    alltag: Wer trägt im Unternehmen am Ende die rechtliche Verantwortung dafür, dass mit Strahlung sicher gearbeitet wird?
+    soll: [StrlSchG § 69]
+    stichworte: [Strahlenschutzverantwortlicher ist, wer]
+
+  - id: q14
+    thema: Fachkunde
+    fach: In welchen Abständen muss die erforderliche Fachkunde im Strahlenschutz aktualisiert werden?
+    alltag: Wie oft muss ich meinen Strahlenschutzkurs auffrischen?
+    soll: [StrlSchV § 48]
+    stichworte: [mindestens alle fünf Jahre]
+
+  - id: q15
+    thema: Unterweisung
+    fach: Wie oft ist die Unterweisung nach der Strahlenschutzverordnung zu wiederholen?
+    alltag: Wie oft muss ich zur Sicherheitsbelehrung, wenn ich mit radioaktiven Quellen arbeite?
+    soll: [StrlSchV § 63]
+    stichworte: [mindestens einmal im Jahr]
+
+  - id: q16
+    thema: Unterweisung
+    fach: Wie lange sind die Aufzeichnungen über Unterweisungen aufzubewahren?
+    alltag: Wie lange muss der Zettel mit meiner Unterschrift von der Belehrung aufgehoben werden?
+    soll: [StrlSchV § 63]
+    stichworte: [fünf Jahre]
+
+  - id: q17
+    thema: Berufliche Exposition
+    fach: Ab welcher effektiven Dosis im Kalenderjahr ist eine beruflich exponierte Person der Kategorie A zuzuordnen?
+    alltag: Ab wann gilt man als besonders stark belasteter Strahlenarbeiter?
+    soll: [StrlSchV § 71]
+    stichworte: [mehr als 6 Millisievert]
+
+  - id: q18
+    thema: Strahlenschutzbereiche
+    fach: Ab welcher effektiven Dosis im Kalenderjahr ist ein Kontrollbereich einzurichten?
+    alltag: Ab wann muss ein Raum mit Strahlung als besonders überwachte Zone abgegrenzt werden?
+    soll: [StrlSchV § 52]
+    stichworte: [Kontrollbereich, wenn Personen im Kalenderjahr eine effektive Dosis von mehr als 6 Millisievert]
+
+  - id: q19
+    thema: Strahlenschutzbereiche
+    fach: Bei welcher Ortsdosisleistung ist ein Sperrbereich einzurichten?
+    alltag: Ab welcher Strahlung pro Stunde darf ein Bereich praktisch nicht mehr betreten werden?
+    soll: [StrlSchV § 52]
+    stichworte: [3 Millisievert durch Stunde]
+
+  - id: q20
+    thema: Ärztliche Überwachung
+    fach: Innerhalb welcher Frist muss eine beruflich exponierte Person der Kategorie A erneut von einem ermächtigten Arzt untersucht werden?
+    alltag: Wie oft muss ich zum Betriebsarzt, wenn ich viel mit Strahlung arbeite?
+    soll: [StrlSchV § 77]
+    stichworte: [innerhalb eines Jahres nach der letzten Untersuchung]
+
+  - id: q21
+    thema: Strahlenquellen
+    fach: Wie oft ist bei hochradioaktiven Strahlenquellen die Dichtheitsprüfung durchzuführen?
+    alltag: Wie oft muss eine sehr starke Strahlenquelle darauf geprüft werden, ob sie leckt?
+    soll: [StrlSchV § 89]
+    stichworte: [mindestens einmal jährlich]
+
+  - id: q22
+    thema: Freigabe
+    fach: Welches Dosiskriterium gilt für die Freigabe radioaktiver Stoffe?
+    alltag: Wann darf leicht radioaktives Material aus dem Rückbau wie normaler Abfall behandelt werden?
+    soll: [StrlSchV § 31]
+    stichworte: [10 Mikrosievert im Kalenderjahr]
+
+  - id: q23
+    thema: Ordnungswidrigkeiten
+    fach: Bis zu welcher Höhe kann eine Ordnungswidrigkeit nach dem Strahlenschutzgesetz mit einer Geldbuße geahndet werden?
+    alltag: Wie teuer kann es werden, wenn eine Firma gegen die Regeln zum Schutz vor Strahlung verstößt?
+    soll: [StrlSchG § 194]
+    stichworte: [fünfzigtausend Euro]
+
+  - id: q24
+    thema: Notfallschutz
+    fach: Welcher Referenzwert für die effektive Dosis gilt für Einsatzkräfte bei Notfalleinsätzen?
+    alltag: Wie viel Strahlung darf ein Feuerwehrmann bei einem Atomunfall abbekommen?
+    soll: [StrlSchG § 114]
+    stichworte: [100 Millisievert]
+
+  - id: q25
+    thema: Notfallschutz
+    fach: Welcher Referenzwert gilt bei der Planung von Schutzmaßnahmen in einem Notfall für die effektive Dosis der betroffenen Bevölkerung?
+    alltag: Wie viel Strahlung wird den Menschen nach einem Reaktorunfall im ersten Jahr noch zugemutet?
+    soll: [StrlSchG § 93]
+    stichworte: [Referenzwert von 100 Millisievert]
+
+  - id: q26
+    thema: Notfallschutz
+    fach: Was sind Schutzwirkstoffe im Sinne des Strahlenschutzgesetzes?
+    alltag: Wer besorgt im Ernstfall die Jodtabletten?
+    soll: [StrlSchG § 104]
+    stichworte: [radioaktiven Jods]
+
+  - id: q27
+    thema: Verlust und Fund
+    fach: Wem ist das Abhandenkommen eines radioaktiven Stoffes mitzuteilen?
+    alltag: Uns ist ein radioaktives Präparat verloren gegangen. Wen muss ich informieren?
+    soll: [StrlSchV § 167]
+    stichworte: [Polizeibehörde]
+
+  - id: q28
+    thema: Verlust und Fund
+    fach: Welche Pflichten hat, wer einen radioaktiven Stoff gefunden hat?
+    alltag: Ich habe auf dem Dachboden meines Opas ein strahlendes Fläschchen entdeckt. Was muss ich tun?
+    soll: [StrlSchV § 168]
+    stichworte: [unverzüglich]
+
+  - id: q29
+    thema: Kennzeichnung
+    fach: Welche Farben haben Kennzeichen und Untergrund des Strahlenzeichens?
+    alltag: Welche Farben hat das Warnschild für Radioaktivität?
+    soll: [StrlSchV Anlage 10]
+    stichworte: ["Untergrund: gelb"]
+
+  - id: q30
+    thema: Rechtfertigung
+    fach: Welche Tätigkeitsarten sind nach der Strahlenschutzverordnung nicht gerechtfertigt?
+    alltag: Darf ein Installateur radioaktive Stoffe benutzen, um ein Leck in der Heizung zu finden?
+    soll: [StrlSchV Anlage 1, StrlSchV § 2]
+    stichworte: [Leckagesuche]
+
+  - id: q31
+    thema: Begriffe
+    fach: Wie definiert das Strahlenschutzgesetz einen Notfall?
+    alltag: Was zählt rechtlich eigentlich als Strahlenunfall mit ernsten Folgen?
+    soll: [StrlSchG § 5]
+    stichworte: [erhebliche nachteilige Auswirkungen]
+
+  - id: q32
+    thema: Begriffe
+    fach: Was ist ein Referenzwert im Sinne des Strahlenschutzgesetzes?
+    alltag: Ist ein Richtwert für Strahlung dasselbe wie eine Obergrenze, die man nie überschreiten darf?
+    soll: [StrlSchG § 5]
+    stichworte: [Ein Referenzwert ist kein Grenzwert]
+
+  - id: q33
+    thema: Buchführung
+    fach: Bis wann ist der zuständigen Behörde der Bestand an radioaktiven Stoffen am Ende eines Kalenderjahres mitzuteilen?
+    alltag: Bis wann muss ich dem Amt melden, welche strahlenden Präparate wir zum Jahreswechsel im Labor haben?
+    soll: [StrlSchV § 85]
+    stichworte: [31. Januar]
+
+  - id: q34
+    thema: Röntgen
+    fach: In welchem Raum darf eine Röntgeneinrichtung betrieben werden?
+    alltag: Darf ich ein Röntgengerät einfach in einem normalen Büro aufstellen?
+    soll: [StrlSchV § 60]
+    stichworte: [nur in einem Röntgenraum betrieben]
+
+  - id: q35
+    thema: Haftung
+    fach: Wonach richtet sich die Haftung für durch ionisierende Strahlung verursachte Schäden?
+    alltag: Wer zahlt, wenn jemand durch radioaktive Strahlung zu Schaden kommt?
+    soll: [StrlSchG § 176]
+    stichworte: [Atomgesetzes]
+
+  - id: q36
+    thema: Mutterschutz
+    fach: Wie sind die Arbeitsbedingungen einer schwangeren oder stillenden Person mit möglicher beruflicher Exposition zu gestalten?
+    alltag: Ich stille noch. Darf ich weiter im Isotopenlabor arbeiten?
+    soll: [StrlSchV § 69]
+    stichworte: [innere berufliche Exposition ausgeschlossen]
+
+  - id: q37
+    thema: Dosisgrenzwerte
+    fach: Welcher Grenzwert der effektiven Dosis gilt für besonders zugelassene Expositionen im Berufsleben?
+    alltag: Wie viel darf jemand insgesamt abbekommen, der ausnahmsweise eine besonders gefährliche Reparatur übernimmt?
+    soll: [StrlSchV § 74]
+    stichworte: [Grenzwert der effektiven Dosis 100 Millisievert]
+
+  - id: q38
+    thema: Medizin
+    fach: Wann ist ein Medizinphysik-Experte zur engen Mitarbeit hinzuzuziehen?
+    alltag: Muss bei einer Strahlentherapie ein Physiker dabei sein?
+    soll: [StrlSchV § 131]
+    stichworte: [Bestrahlungsplan]
+
+  - id: q39
+    thema: Luftfahrt
+    fach: Wann ist der Betrieb eines Luftfahrzeugs wegen der Exposition des fliegenden Personals anzuzeigen?
+    alltag: Muss eine Fluggesellschaft dem Amt melden, dass ihre Crews Höhenstrahlung abbekommen?
+    soll: [StrlSchG § 50]
+    stichworte: [vier Wochen]
+
+  - id: q40
+    thema: Register
+    fach: Wo werden die Daten über die berufliche Exposition im Strahlenschutzregister erfasst?
+    alltag: Wo wird zentral gespeichert, wie viel Strahlung ich im Laufe meines Berufslebens abbekommen habe?
+    soll: [StrlSchG § 170]
+    stichworte: [Bundesamt für Strahlenschutz]
+
+# Fragen, die der Korpus nicht beantwortet (für die Enthaltung). Einige liegen bewusst nah am Thema
+# (nichtionisierende Strahlung, andere Beauftragte, andere Grenzwerte).
+fremd:
+  - Wie hoch ist der gesetzliche Mindestlohn?
+  - Wie lange ist die Kündigungsfrist für eine Mietwohnung?
+  - Wie lange dauert der Mutterschutz nach der Geburt?
+  - Bis wann muss ich meine Einkommensteuererklärung abgeben?
+  - Wie backe ich ein Sauerteigbrot?
+  - Ab wann gilt nachts die Ruhezeit in einem Mehrfamilienhaus?
+  - Ab wie vielen Mitarbeitern muss ein Unternehmen einen Datenschutzbeauftragten benennen?
+  - Welcher Grenzwert gilt für Feinstaub in der Außenluft?
+  - Welche Grenzwerte gelten für Mobilfunkstrahlung von Sendemasten?
+  - Dürfen Jugendliche unter 18 Jahren ins Solarium?
+  - Wie muss Asbest bei einer Sanierung entsorgt werden?
+  - Wie viele Urlaubstage stehen Arbeitnehmern gesetzlich zu?
+  - Wie schnell darf man innerorts fahren?
+  - Welche Schutzausrüstung braucht man beim Schweißen?
+  - Wie oft müssen Feuerlöscher geprüft werden?
