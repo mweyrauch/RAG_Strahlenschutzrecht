@@ -1,6 +1,6 @@
 """Antworterzeugung aus abgerufenen Abschnitten.
 
-Backends:
+Backends (jedes hat eine Methode antworte(frage, treffer) -> str):
 - ExtraktivBackend:      ohne Sprachmodell; waehlt die zur Frage passendsten Saetze
                          aus den Quellen und zitiert sie. Dient als nachvollziehbare
                          Basislinie und fuer Tests.
@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -25,7 +26,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from .retrieval import Retriever, Treffer
-from .text import Analysator, saetze
+from .text import Analysator, falte, saetze
 
 KEINE_GRUNDLAGE = "Dazu finde ich in den Quellen keine Grundlage."
 
@@ -89,12 +90,7 @@ def baue_nachrichten(frage: str, treffer: list[Treffer]) -> list[dict]:
     ]
 
 
-class Backend:
-    def antworte(self, frage: str, treffer: list[Treffer]) -> str:  # pragma: no cover
-        raise NotImplementedError
-
-
-class ChatBackend(Backend):
+class ChatBackend:
     """Backend mit einem Sprachmodell; chat() nimmt Nachrichten und gibt Text zurueck."""
 
     def chat(self, nachrichten: list[dict]) -> str:  # pragma: no cover - abstrakt
@@ -114,7 +110,7 @@ class MockBackend(ChatBackend):
         return self.text
 
 
-class ExtraktivBackend(Backend):
+class ExtraktivBackend:
     """Waehlt bis zu n Saetze mit der hoechsten TF-IDF-Aehnlichkeit zur Frage."""
 
     def __init__(self, n_saetze: int = 2):
@@ -161,6 +157,8 @@ class OpenAIKompatibelBackend(ChatBackend):
         self.timeout = timeout or float(os.environ.get("LLM_TIMEOUT", "600"))
         self.cache_dir = Path(cache_dir) if cache_dir else None
         self.anfragen = 0  # tatsaechliche Aufrufe des Servers (ohne Cache-Treffer)
+        # Wartezeiten zwischen Wiederholungen bei Verbindungsabbruch, Zeitueberschreitung oder 5xx
+        self.wartezeiten = [10, 30, 60]
 
     def _cache_pfad(self, nachrichten) -> Path | None:
         if self.cache_dir is None:
@@ -178,12 +176,24 @@ class OpenAIKompatibelBackend(ChatBackend):
         kopf = {"Content-Type": "application/json"}
         if self.api_key:
             kopf["Authorization"] = f"Bearer {self.api_key}"
-        r = requests.post(
-            f"{self.base_url}/chat/completions",
-            json={"model": self.modell, "temperature": self.temperatur,
-                  "messages": nachrichten},
-            headers=kopf, timeout=self.timeout,
-        )
+        for versuch, pause in enumerate([*self.wartezeiten, None], start=1):
+            try:
+                r = requests.post(
+                    f"{self.base_url}/chat/completions",
+                    json={"model": self.modell, "temperature": self.temperatur,
+                          "messages": nachrichten},
+                    headers=kopf, timeout=self.timeout,
+                )
+                if r.status_code < 500:
+                    break
+                fehler = f"HTTP {r.status_code}"
+            except (requests.ConnectionError, requests.Timeout) as e:
+                fehler = type(e).__name__
+                r = None
+            if pause is None:
+                raise RuntimeError(f"LLM-Server antwortet nicht ({fehler}) nach {versuch} Versuchen")
+            print(f"    LLM-Anfrage fehlgeschlagen ({fehler}), neuer Versuch in {pause} s", flush=True)
+            time.sleep(pause)
         r.raise_for_status()
         self.anfragen += 1
         text = r.json()["choices"][0]["message"]["content"].strip()
@@ -194,12 +204,20 @@ class OpenAIKompatibelBackend(ChatBackend):
         return text
 
 
-def beantworte(frage: str, retriever: Retriever, backend: Backend, k: int = 5,
+_ENTHALTUNG = re.compile(r"^\W*dazu \w+ (?:ich |wir )?(?:in den quellen )?keine grundlage")
+
+
+def ist_enthaltung(text: str) -> bool:
+    """Erkennt die Enthaltungsformel, auch leicht abgewandelt ("Dazu finden wir ...") und
+    mit angehaengter Begruendung."""
+    return bool(_ENTHALTUNG.match(falte(text.strip())))
+
+
+def beantworte(frage: str, retriever: Retriever, backend: "ExtraktivBackend | ChatBackend", k: int = 5,
                min_score: float | None = None) -> Antwort:
     """Retrieval + Antwort. Bei min_score wird unterhalb der Schwelle enthalten."""
     treffer = retriever.suche(frage, k)
     if not treffer or (min_score is not None and treffer[0].score < min_score):
         return Antwort(frage, KEINE_GRUNDLAGE, treffer, enthalten=True)
     text = backend.antworte(frage, treffer)
-    # Modelle haengen an die Enthaltungsformel oft noch eine Begruendung an
-    return Antwort(frage, text, treffer, enthalten=text.strip().startswith(KEINE_GRUNDLAGE))
+    return Antwort(frage, text, treffer, enthalten=ist_enthaltung(text))

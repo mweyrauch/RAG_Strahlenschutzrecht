@@ -6,3 +6,5 @@ __pycache__/
 data/roh/
 # Zwischengespeicherte Embeddings
 data/cache/
+# Sperrdateien von LibreOffice
+.~lock.*#

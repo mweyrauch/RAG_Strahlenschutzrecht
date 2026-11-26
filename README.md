@@ -12,8 +12,9 @@ messen, wie gut beides funktioniert. Der Schwerpunkt liegt auf dem dritten Teil.
 ## Kernergebnisse
 
 Abgerufen wird mit mehrsprachigen Embeddings (`intfloat/multilingual-e5-large`) auf Absätzen,
-jeweils mit dem Titel der Vorschrift als Präfix. Zum Vergleich dient die wortbasierte Basislinie
-BM25 mit Stemming. Gemessen wurde auf 40 selbst erstellten Fragen-Items. Jedes Item gibt es in zwei
+jeweils mit dem Titel der Vorschrift als Präfix. Die Antwort formuliert ein lokales Sprachmodell
+(`qwen2.5:7b` über Ollama) aus den fünf besten Absätzen. Zum Vergleich dienen die wortbasierte
+Suche BM25 mit Stemming und eine extraktive Antwort ohne Sprachmodell. Gemessen wurde auf 40 selbst erstellten Fragen-Items. Jedes Item gibt es in zwei
 Formen: einmal **fachsprachlich**, nah am Gesetzeswortlaut, und einmal **alltagssprachlich**, ohne die
 Begriffe der Vorschrift. In Klammern stehen 95-%-Bootstrap-Intervalle über Items.
 
@@ -41,13 +42,63 @@ Platz 1, 0,5 für Platz 2 und 0, wenn sie nicht unter den ersten 50 Treffern ist
    mit 0,80 [0,68; 0,90]. Bei einer Schwelle, die 95 % der Korpusfragen durchlässt, kommen 5 der 15
    Fremdfragen durch, bei BM25 sind es 11. Welche das sind, steht in `ergebnisse/fremdfragen.csv`.
    Die Schwelle ist allerdings auf denselben Fragen gewählt.
-4. **Der Engpass liegt jetzt bei der Antwort.** Bei Alltagsfragen steht das gesuchte Stichwort,
-   z. B. „20 Millisievert“, in 70 % der Fälle in den fünf abgerufenen Absätzen, aber nur in 20 % der
-   extraktiven Antworten. Die extraktive Antwort wählt Sätze nach Wortüberlappung mit der Frage
-   aus und scheitert damit an derselben Lücke wie BM25. Bei Fachfragen liegen die Werte bei 100 %
-   und 68 %.
+4. **Ein Sprachmodell macht aus den Quellen deutlich bessere Antworten.** Bei Alltagsfragen steht
+   die gesuchte Angabe in 75 % der Fälle in den fünf abgerufenen Absätzen. Die extraktive Antwort
+   trifft sie nur in 20 % der Fälle, qwen2.5:7b in 48 % (automatische Bewertung, siehe
+   [Antworten](#antworten)). Eine von 72 beantworteten Fragen enthielt einen sicherheitsrelevanten
+   Fehler.
 
 ![Recall@k](docs/abbildungen/recall_kurven.png)
+
+### Antworten
+
+Eine Antwort auf eine Korpusfrage gilt automatisch als korrekt, wenn das System sich nicht
+enthält und eines der vorab festgelegten Antwortmuster im Text steht (z. B. „400 Millisievert“).
+Bei Fremdfragen ist die Enthaltung korrekt. Abruf jeweils mit e5-large, ohne Score-Schwelle:
+
+| Antwort | Fachfragen korrekt | Alltagsfragen korrekt | Fremdfragen enthalten |
+|---|---|---|---|
+| extraktiv (Satzauswahl per TF-IDF) | 0,68 [0,53; 0,80] | 0,20 [0,08; 0,33] | 5 von 15 |
+| **qwen2.5:7b** | **0,90** [0,80; 0,98] | **0,48** [0,33; 0,63] | **15 von 15** |
+
+1. **Das Sprachmodell nutzt die Quellen deutlich besser.** Es erkennt zum Beispiel, dass „die
+   Summe der in allen Kalenderjahren ermittelten effektiven Dosen“ (§ 77 StrlSchG) die Frage nach
+   der Strahlung „über das ganze Arbeitsleben“ beantwortet. Die extraktive Antwort findet diesen
+   Satz nicht, weil er kein Wort mit der Frage teilt.
+2. **Zitate sind verlässlich.** Bei allen korrekt gewerteten Antworten zitiert das Modell eine
+   Soll-Vorschrift. Zitate auf nicht vorhandene Quellennummern kamen nicht vor.
+3. **Die Enthaltung übernimmt das Modell besser als eine Score-Schwelle.** Alle 15 Fremdfragen
+   beantwortet es mit der Enthaltungsformel, auch die 5, die die Schwelle passieren. Eine
+   zusätzliche Schwelle verschlechtert dagegen die Alltagsfragen (0,40 statt 0,48), weil sie
+   auch beantwortbare Fragen abweist.
+
+**Manuelle Prüfung.** Die 25 Korpusfragen, die die automatische Bewertung nicht als korrekt wertet,
+wurden einzeln mit dem Gesetzestext verglichen (`data/eval/pruefung_llm.yaml`):
+
+| Einordnung | Anzahl | Beispiel |
+|---|---|---|
+| inhaltlich richtig, Muster zu eng oder Frage mehrdeutig | 9 | q24: nennt 250 und 500 mSv aus § 114 Abs. 3, das Muster kannte nur 100 mSv aus Abs. 2 |
+| unvollständig | 5 | q27: nennt das Bundesamt für Strahlenschutz, nicht aber Aufsichts- und Polizeibehörde |
+| falsch | 3 | q36, q40, q25 (siehe unten) |
+| enthalten | 8 | in 4 Fällen stand die Antwort in den Quellen, in 4 Fällen nicht |
+
+Von den 72 beantworteten Korpusfragen enthalten damit 3 eine falsche Aussage. Inhaltlich richtig
+sind nach der manuellen Prüfung 64 von 80 Antworten, nach der automatischen Bewertung 55 von 80.
+Die Einordnung ist von Hand vorgenommen und nicht unabhängig geprüft. Die Antwortmuster wurden
+nach dem Lauf nicht angepasst.
+
+**Ein sicherheitsrelevanter Fehler.** Auf die Alltagsfrage „Ich stille noch. Darf ich weiter im
+Isotopenlabor arbeiten?“ antwortet das Modell: „Ja, Sie dürfen weiter im Isotopenlabor arbeiten
+…“. § 69 StrlSchV verlangt dagegen, dass bei stillenden Personen eine innere berufliche Exposition
+ausgeschlossen ist. § 69 war nicht unter den fünf Quellen. Statt sich zu enthalten, zieht das
+Modell aus anderen, nur verwandten Quellen einen falschen Schluss.
+Für einen Einsatz im Strahlenschutz heißt das: Antworten zu Schutzpflichten brauchen eine
+fachliche Prüfung, auch wenn Zitate vorhanden und formal korrekt sind.
+
+Auf dem Laptop des Autors (CPU, 16 GB RAM) brauchte das Modell im Mittel etwa 100 Sekunden je
+Frage. Mit dem Embedding-Modell gleichzeitig im Speicher wurde Ollama zunächst wegen Speichermangels
+beendet; seither ruft das Skript alle Quellen vorab ab und gibt das Embedding-Modell vor den
+Anfragen frei.
 
 ### Wahl des Embedding-Modells
 
@@ -95,8 +146,9 @@ configs/
   experimente.yaml          Embeddings gegen BM25 (Ergebnisse oben)
   experimente_modelle.yaml  Vergleich der Embedding-Modelle
   experimente_llm.yaml      Antworten eines Sprachmodells gegen die extraktive Antwort
-data/eval/fragen.yaml  40 Items (fach + alltag), 15 Fremdfragen
-tests/               44 Tests auf einem synthetischen Testgesetz
+data/eval/fragen.yaml        40 Items (fach + alltag), 15 Fremdfragen
+data/eval/pruefung_llm.yaml  manuelle Prüfung der nicht korrekt gewerteten Antworten
+tests/               51 Tests auf einem synthetischen Testgesetz
 ```
 
 ## Schnellstart
@@ -208,16 +260,33 @@ zeitgesteuerte CI-Job wiederholt diese Prüfung wöchentlich gegen die aktuelle 
 - **Lange Absätze werden abgeschnitten.** E5 verarbeitet höchstens 512 Tokens. Etwa 36 der 1.397
   Absätze haben mehr als 300 Wörter und dürften gekürzt in die Embeddings eingehen, vor allem
   Tabellen in den Anlagen.
-- **Getestet:** Embeddings wurden lokal unter Python 3.12 ausgeführt, in den Tests nur mit einem
-  Ersatzmodell. Die Entwicklungsumgebung lief unter Python 3.13.
-- **Nicht systematisch ausgewertet:** Antworten des Sprachmodells (`OpenAIKompatibelBackend`).
-  Sie wurden nur an Einzelbeispielen mit Ollama ausprobiert.
+- **Getestet:** Embeddings und Sprachmodell (Ollama) wurden lokal unter Python 3.12 ausgeführt,
+  in den Tests nur mit Ersatzmodellen. Die Entwicklungsumgebung lief unter Python 3.13.
+- **Ein Sprachmodell, ein Lauf.** Gemessen wurde nur qwen2.5:7b mit Temperatur 0. Andere oder
+  größere Modelle können sich deutlich anders verhalten. Alle Antworten stehen im Wortlaut in
+  `ergebnisse_llm/antworten.csv`.
+- **Die automatische Antwortbewertung ist grob.** Sie übersieht korrekte, anders formulierte
+  Antworten (9 Fälle) und erkennt keine falschen Zusatzaussagen in sonst korrekt gewerteten
+  Antworten. Diese wurden nicht von Hand geprüft.
 - **Nicht ausgeführt:** `scripts/lade_korpus.py` (die Rohdaten wurden manuell heruntergeladen)
   und die CI.
 
 ## Nächste Schritte
 
-1. Antworten eines Sprachmodells auf allen 80 Fragen gegen die extraktive Antwort messen:
-   Abdeckung der Stichworte, Zitattreue und Enthaltung.
-2. Das Fragenset von weiteren Personen formulieren lassen, Fragen ohne Lektüre der Vorschriften
+1. Sicherheitsrelevante Themen gezielt prüfen: Für Schutzpflichten, etwa bei Schwangerschaft,
+   Stillzeit oder Jugendlichen, eigene Testfragen anlegen und Antworten dazu kennzeichnen oder
+   nur mit Hinweis auf fachliche Prüfung ausgeben (siehe q36).
+2. Weitere oder größere Sprachmodelle gegen qwen2.5:7b messen, besonders bei den 4
+   übervorsichtigen Enthaltungen und den 3 falschen Antworten.
+3. Das Fragenset von weiteren Personen formulieren lassen, Fragen ohne Lektüre der Vorschriften
    ergänzen und einen Teil für die Wahl von Modell und Schwelle zurückhalten.
+4. Die extraktive Basislinie stärken: Bisher vergleicht sie nur die Sätze selbst mit der Frage,
+   ohne den Titel der Vorschrift. Bei q02 („Berufslebensdosis“) steht der Begriff nur im Titel von
+   § 77 StrlSchG, nicht im Satz mit „400 Millisievert“. Deshalb wählt die extraktive Antwort dort
+   falsche Sätze, obwohl § 77 auf Platz 1 abgerufen wird. Der Titel sollte beim Vergleich mitzählen.
+
+## Lizenz
+
+Der Code steht unter der Lizenz in [`LICENSE`](LICENSE). Die Gesetzestexte sind nicht im
+Repository enthalten. `scripts/lade_korpus.py` lädt sie von gesetze-im-internet.de; als amtliche
+Werke (§ 5 UrhG) sind sie urheberrechtlich frei.

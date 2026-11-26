@@ -1,0 +1,134 @@
+# Manuelle Prüfung der Antworten von qwen2.5:7b (configs/experimente_llm.yaml, Retriever e5-large)
+#
+# Geprüft wurden alle 25 Korpusfragen, die die automatische Bewertung (antwort_muster) nicht als
+# korrekt gewertet hat. Grundlage ist ergebnisse_llm/antworten.csv; verglichen wurde mit dem
+# Wortlaut der Vorschriften. Die Einordnung ist von Hand vorgenommen und nicht unabhängig geprüft.
+# Die automatische Bewertung bleibt unverändert die Hauptkennzahl; die Muster wurden nach dem
+# Lauf nicht angepasst.
+#
+# Kategorien:
+#   richtig       inhaltlich richtig; Muster zu eng oder Frage mehrdeutig
+#   unvollstaendig richtige Richtung, aber der erfragte Kern fehlt oder ist ungenau
+#   falsch        sachlich falsche Aussage zur gestellten Frage
+#   enthalten     Modell enthält sich; quelle_im_kontext gibt an, ob ein Antwortmuster in den
+#                 fünf abgerufenen Absätzen stand
+
+modell: qwen2.5:7b
+retriever: dense (intfloat/multilingual-e5-large)
+
+pruefung:
+  - frage: q03-alltag
+    kategorie: richtig
+    begruendung: >-
+      Nennt 0,3 Millisievert für Ableitungen mit Luft oder Wasser (StrlSchV § 99). Die Alltagsfrage
+      nach Strahlung „aus einer Anlage in der Nachbarschaft“ lässt diese Lesart zu; das Muster
+      kannte nur 1 Millisievert (StrlSchG § 80).
+  - frage: q05-alltag
+    kategorie: richtig
+    begruendung: >-
+      Nennt 6 Millisievert für einen 17-jährigen Azubi. StrlSchG § 78 Abs. 3 Satz 3 erlaubt der
+      Behörde, das für Auszubildende zwischen 16 und 18 Jahren zuzulassen. Die Bedingung
+      „kann zulassen“ fehlt in der Antwort; die Frage war für das Muster (1 Millisievert) mehrdeutig.
+  - frage: q09-alltag
+    kategorie: richtig
+    begruendung: >-
+      Bejaht die Messpflicht und begründet sie mit der Lage im Radongebiet (StrlSchG § 127). Die
+      Ja/Nein-Frage ist damit beantwortet; das Muster verlangte die Frist von 18 Monaten.
+  - frage: q13-alltag
+    kategorie: richtig
+    begruendung: >-
+      „Der Strahlenschutzverantwortliche“ beantwortet die Alltagsfrage nach der rechtlichen
+      Verantwortung. Das Muster erwartete die Definition aus StrlSchG § 69.
+  - frage: q24-fach
+    kategorie: richtig
+    begruendung: >-
+      Nennt 250 und 500 Millisievert; beides steht in StrlSchG § 114 Abs. 3 (Rettung von Leben,
+      Ausnahmefälle). Der Referenzwert von 100 Millisievert aus Abs. 2, den das Muster erwartete,
+      fehlt.
+  - frage: q24-alltag
+    kategorie: richtig
+    begruendung: Wie q24-fach.
+  - frage: q32-alltag
+    kategorie: richtig
+    begruendung: >-
+      „Nein, ein Richtwert ist nicht dasselbe wie eine Obergrenze“ entspricht StrlSchG § 5
+      („Ein Referenzwert ist kein Grenzwert“). Der Rest der Antwort schweift ab.
+  - frage: q39-fach
+    kategorie: richtig
+    begruendung: >-
+      Nennt die Anzeigepflicht ab 1 Millisievert effektiver Dosis des fliegenden Personals
+      (StrlSchG § 50 Abs. 1). Die Frage „Wann …“ lässt das zu; das Muster verlangte die Frist von
+      vier Wochen.
+  - frage: q39-alltag
+    kategorie: richtig
+    begruendung: Wie q39-fach.
+  - frage: q27-alltag
+    kategorie: unvollstaendig
+    begruendung: >-
+      Nennt Strahlenschutzverantwortlichen und Bundesamt für Strahlenschutz, aber nicht die
+      Aufsichts- und Polizeibehörde aus StrlSchV § 167.
+  - frage: q28-alltag
+    kategorie: unvollstaendig
+    begruendung: >-
+      Empfiehlt, die Behörde zu informieren, aber ohne „unverzüglich“ und mit falscher Fundstelle
+      (§ 169 StrlSchG statt § 168 StrlSchV).
+  - frage: q31-alltag
+    kategorie: unvollstaendig
+    begruendung: >-
+      Beschreibt Notfall, Störfall und bedeutsames Vorkommnis vermischt; das Merkmal
+      „erhebliche“ nachteilige Auswirkungen aus der Definition in StrlSchG § 5 fehlt.
+  - frage: q38-fach
+    kategorie: unvollstaendig
+    begruendung: >-
+      Zählt die Fälle aus StrlSchV § 131 Abs. 2 auf, nicht aber die Mitwirkung am
+      Bestrahlungsplan aus Abs. 1.
+  - frage: q40-fach
+    kategorie: unvollstaendig
+    begruendung: >-
+      Antwortet zirkulär („im Strahlenschutzregister“), ohne das Bundesamt für Strahlenschutz zu
+      nennen. Die Frage war ungeschickt formuliert.
+  - frage: q25-alltag
+    kategorie: falsch
+    begruendung: >-
+      Nennt 20 Millisievert nach StrlSchG § 118 Abs. 6. Das gilt für den Übergang zu einer
+      bestehenden Expositionssituation, nicht für das erste Jahr nach einem Notfall (100
+      Millisievert, § 93). Die richtige Vorschrift war nicht unter den Quellen.
+  - frage: q36-alltag
+    kategorie: falsch
+    sicherheitsrelevant: true
+    begruendung: >-
+      Auf „Ich stille noch. Darf ich weiter im Isotopenlabor arbeiten?“ antwortet das Modell „Ja,
+      Sie dürfen weiter im Isotopenlabor arbeiten …“. StrlSchV § 69 verlangt, dass bei stillenden
+      Personen eine innere berufliche Exposition ausgeschlossen ist. Die Antwort widerspricht sich
+      zudem selbst, weil sie anschließend eine Zutrittsbeschränkung zitiert. § 69 war nicht unter
+      den fünf Quellen; statt sich zu enthalten, schließt das Modell aus verwandten Vorschriften.
+  - frage: q40-alltag
+    kategorie: falsch
+    begruendung: >-
+      Behauptet „Zentral wird die Daten nicht gespeichert“. Das Strahlenschutzregister beim
+      Bundesamt für Strahlenschutz (StrlSchG § 170) ist genau diese zentrale Stelle. Der Absatz,
+      der das Bundesamt nennt, war nicht unter den fünf Quellen.
+  - frage: q11-alltag
+    kategorie: enthalten
+    quelle_im_kontext: false
+  - frage: q15-alltag
+    kategorie: enthalten
+    quelle_im_kontext: true
+  - frage: q16-alltag
+    kategorie: enthalten
+    quelle_im_kontext: true
+  - frage: q17-alltag
+    kategorie: enthalten
+    quelle_im_kontext: true
+  - frage: q22-alltag
+    kategorie: enthalten
+    quelle_im_kontext: false
+  - frage: q23-alltag
+    kategorie: enthalten
+    quelle_im_kontext: false
+  - frage: q30-alltag
+    kategorie: enthalten
+    quelle_im_kontext: false
+  - frage: q34-alltag
+    kategorie: enthalten
+    quelle_im_kontext: true

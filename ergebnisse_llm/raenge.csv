@@ -1,0 +1,81 @@
+frage,item,stil,thema,rang,top_score,top_quelle,retriever
+q01-fach,q01,fach,Dosisgrenzwerte,1,0.9445382356643677,StrlSchG § 78,dense
+q01-alltag,q01,alltag,Dosisgrenzwerte,1,0.8827406167984009,StrlSchG § 78,dense
+q02-fach,q02,fach,Dosisgrenzwerte,1,0.9193975925445557,StrlSchG § 77,dense
+q02-alltag,q02,alltag,Dosisgrenzwerte,1,0.8661224842071533,StrlSchG § 77,dense
+q03-fach,q03,fach,Dosisgrenzwerte,2,0.9022091627120972,StrlSchG § 78,dense
+q03-alltag,q03,alltag,Dosisgrenzwerte,13,0.8532531261444092,StrlSchG § 64,dense
+q04-fach,q04,fach,Dosisgrenzwerte,1,0.9453125596046448,StrlSchG § 78,dense
+q04-alltag,q04,alltag,Dosisgrenzwerte,1,0.8761622905731201,StrlSchG § 78,dense
+q05-fach,q05,fach,Dosisgrenzwerte,1,0.9232416749000549,StrlSchG § 78,dense
+q05-alltag,q05,alltag,Dosisgrenzwerte,2,0.8660044074058533,StrlSchV § 70,dense
+q06-fach,q06,fach,Dosisgrenzwerte,1,0.9036082625389099,StrlSchG § 78,dense
+q06-alltag,q06,alltag,Dosisgrenzwerte,1,0.8777828216552734,StrlSchG § 78,dense
+q07-fach,q07,fach,Radon,1,0.9165691137313843,StrlSchG § 124,dense
+q07-alltag,q07,alltag,Radon,3,0.8793820142745972,StrlSchG § 128,dense
+q08-fach,q08,fach,Radon,1,0.9292237758636475,StrlSchG § 126,dense
+q08-alltag,q08,alltag,Radon,4,0.8198902606964111,StrlSchG § 127,dense
+q09-fach,q09,fach,Radon,2,0.9124487042427063,StrlSchG § 214,dense
+q09-alltag,q09,alltag,Radon,1,0.866129457950592,StrlSchG § 127,dense
+q10-fach,q10,fach,Radon,1,0.9124979972839355,StrlSchV § 155,dense
+q10-alltag,q10,alltag,Radon,1,0.8766108155250549,StrlSchV § 155,dense
+q11-fach,q11,fach,Organisation,1,0.9026621580123901,StrlSchG § 70,dense
+q11-alltag,q11,alltag,Organisation,19,0.8776640892028809,StrlSchV § 74,dense
+q12-fach,q12,fach,Organisation,1,0.9310288429260254,StrlSchG § 70,dense
+q12-alltag,q12,alltag,Organisation,3,0.8644043207168579,StrlSchV § 122,dense
+q13-fach,q13,fach,Organisation,2,0.8928423523902893,StrlSchG § 115,dense
+q13-alltag,q13,alltag,Organisation,5,0.87209153175354,StrlSchV § 45,dense
+q14-fach,q14,fach,Fachkunde,1,0.9452517032623291,StrlSchV § 48,dense
+q14-alltag,q14,alltag,Fachkunde,1,0.9027131795883179,StrlSchV § 48,dense
+q15-fach,q15,fach,Unterweisung,1,0.8871873617172241,StrlSchV § 63,dense
+q15-alltag,q15,alltag,Unterweisung,17,0.855049729347229,StrlSchV § 88,dense
+q16-fach,q16,fach,Unterweisung,1,0.8968263864517212,StrlSchV § 63,dense
+q16-alltag,q16,alltag,Unterweisung,4,0.8379132747650146,StrlSchG § 64,dense
+q17-fach,q17,fach,Berufliche Exposition,1,0.908770740032196,StrlSchV § 71,dense
+q17-alltag,q17,alltag,Berufliche Exposition,2,0.8666869401931763,StrlSchV § 72,dense
+q18-fach,q18,fach,Strahlenschutzbereiche,1,0.8882128596305847,StrlSchV § 52,dense
+q18-alltag,q18,alltag,Strahlenschutzbereiche,2,0.8787737488746643,StrlSchV § 53,dense
+q19-fach,q19,fach,Strahlenschutzbereiche,2,0.8667797446250916,StrlSchV § 56,dense
+q19-alltag,q19,alltag,Strahlenschutzbereiche,1,0.8647550344467163,StrlSchV § 52,dense
+q20-fach,q20,fach,Ärztliche Überwachung,1,0.9106284379959106,StrlSchV § 77,dense
+q20-alltag,q20,alltag,Ärztliche Überwachung,3,0.8607369661331177,StrlSchV § 126,dense
+q21-fach,q21,fach,Strahlenquellen,1,0.9232809543609619,StrlSchV § 89,dense
+q21-alltag,q21,alltag,Strahlenquellen,1,0.8777648210525513,StrlSchV § 89,dense
+q22-fach,q22,fach,Freigabe,1,0.9162353277206421,StrlSchV § 31,dense
+q22-alltag,q22,alltag,Freigabe,6,0.8651784658432007,StrlSchG § 141,dense
+q23-fach,q23,fach,Ordnungswidrigkeiten,1,0.8724968433380127,StrlSchG § 194,dense
+q23-alltag,q23,alltag,Ordnungswidrigkeiten,34,0.8451628684997559,StrlSchG § 35,dense
+q24-fach,q24,fach,Notfallschutz,1,0.901903510093689,StrlSchG § 114,dense
+q24-alltag,q24,alltag,Notfallschutz,1,0.8628401756286621,StrlSchG § 114,dense
+q25-fach,q25,fach,Notfallschutz,1,0.9188677072525024,StrlSchG § 93,dense
+q25-alltag,q25,alltag,Notfallschutz,18,0.8529924750328064,StrlSchV § 99,dense
+q26-fach,q26,fach,Notfallschutz,1,0.9005484580993652,StrlSchG § 104,dense
+q26-alltag,q26,alltag,Notfallschutz,2,0.8540304899215698,StrlSchG § 94,dense
+q27-fach,q27,fach,Verlust und Fund,1,0.8940185308456421,StrlSchV § 167,dense
+q27-alltag,q27,alltag,Verlust und Fund,1,0.8561448454856873,StrlSchV § 167,dense
+q28-fach,q28,fach,Verlust und Fund,1,0.86658775806427,StrlSchV § 168,dense
+q28-alltag,q28,alltag,Verlust und Fund,4,0.8120872974395752,StrlSchV § 57,dense
+q29-fach,q29,fach,Kennzeichnung,1,0.8942849636077881,StrlSchV Anlage 10,dense
+q29-alltag,q29,alltag,Kennzeichnung,1,0.8272262215614319,StrlSchV Anlage 10,dense
+q30-fach,q30,fach,Rechtfertigung,1,0.8997403383255005,StrlSchV Anlage 1,dense
+q30-alltag,q30,alltag,Rechtfertigung,17,0.8400033116340637,StrlSchG § 165,dense
+q31-fach,q31,fach,Begriffe,1,0.8897610902786255,StrlSchG § 5,dense
+q31-alltag,q31,alltag,Begriffe,1,0.8725292682647705,StrlSchG § 5,dense
+q32-fach,q32,fach,Begriffe,1,0.9005985260009766,StrlSchG § 5,dense
+q32-alltag,q32,alltag,Begriffe,12,0.8635112643241882,StrlSchV § 137,dense
+q33-fach,q33,fach,Buchführung,1,0.8990819454193115,StrlSchV § 85,dense
+q33-alltag,q33,alltag,Buchführung,1,0.8458373546600342,StrlSchV § 85,dense
+q34-fach,q34,fach,Röntgen,1,0.8854150176048279,StrlSchV § 60,dense
+q34-alltag,q34,alltag,Röntgen,1,0.8551443815231323,StrlSchV § 60,dense
+q35-fach,q35,fach,Haftung,1,0.908871591091156,StrlSchG § 176,dense
+q35-alltag,q35,alltag,Haftung,2,0.865699291229248,StrlSchG § 35,dense
+q36-fach,q36,fach,Mutterschutz,1,0.8992175459861755,StrlSchV § 69,dense
+q36-alltag,q36,alltag,Mutterschutz,12,0.8301951885223389,StrlSchV § 55,dense
+q37-fach,q37,fach,Dosisgrenzwerte,3,0.9259881973266602,StrlSchG § 78,dense
+q37-alltag,q37,alltag,Dosisgrenzwerte,3,0.8109961748123169,StrlSchV § 151,dense
+q38-fach,q38,fach,Medizin,1,0.8901503086090088,StrlSchV § 131,dense
+q38-alltag,q38,alltag,Medizin,1,0.8738393187522888,StrlSchV § 131,dense
+q39-fach,q39,fach,Luftfahrt,1,0.8623102307319641,StrlSchG § 50,dense
+q39-alltag,q39,alltag,Luftfahrt,1,0.8575359582901001,StrlSchG § 50,dense
+q40-fach,q40,fach,Register,1,0.9090877771377563,StrlSchG § 170,dense
+q40-alltag,q40,alltag,Register,5,0.8535983562469482,StrlSchG § 167,dense

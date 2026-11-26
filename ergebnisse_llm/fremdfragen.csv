@@ -1,0 +1,16 @@
+retriever,frage,top_score,top_quelle,ueber_schwelle
+dense,Wie hoch ist der gesetzliche Mindestlohn?,0.8043909668922424,StrlSchG § 194,False
+dense,Wie lange ist die Kündigungsfrist für eine Mietwohnung?,0.8067901134490967,StrlSchG § 46,False
+dense,Wie lange dauert der Mutterschutz nach der Geburt?,0.810876727104187,StrlSchG § 78,False
+dense,Bis wann muss ich meine Einkommensteuererklärung abgeben?,0.8335332870483398,StrlSchV § 193,True
+dense,Wie backe ich ein Sauerteigbrot?,0.7533204555511475,StrlSchG § 205,False
+dense,Ab wann gilt nachts die Ruhezeit in einem Mehrfamilienhaus?,0.8038777709007263,StrlSchG § 135,False
+dense,Ab wie vielen Mitarbeitern muss ein Unternehmen einen Datenschutzbeauftragten benennen?,0.8276132941246033,StrlSchG § 145,False
+dense,Welcher Grenzwert gilt für Feinstaub in der Außenluft?,0.8371762633323669,StrlSchG § 124,True
+dense,Welche Grenzwerte gelten für Mobilfunkstrahlung von Sendemasten?,0.8386417627334595,StrlSchV § 18,True
+dense,Dürfen Jugendliche unter 18 Jahren ins Solarium?,0.83158278465271,StrlSchV § 70,True
+dense,Wie muss Asbest bei einer Sanierung entsorgt werden?,0.8249248266220093,StrlSchG § 143,False
+dense,Wie viele Urlaubstage stehen Arbeitnehmern gesetzlich zu?,0.8120379447937012,StrlSchG § 52,False
+dense,Wie schnell darf man innerorts fahren?,0.7986207008361816,StrlSchV Anlage 3,False
+dense,Welche Schutzausrüstung braucht man beim Schweißen?,0.8235594034194946,StrlSchV § 75,False
+dense,Wie oft müssen Feuerlöscher geprüft werden?,0.8429991006851196,StrlSchV § 25,True

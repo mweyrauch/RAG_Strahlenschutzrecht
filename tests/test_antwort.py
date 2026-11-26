@@ -72,8 +72,9 @@ def test_lange_quellen_werden_im_prompt_gekuerzt(retriever):
 
 
 class _Antwort:
-    def __init__(self, text):
+    def __init__(self, text, status_code=200):
         self.text = text
+        self.status_code = status_code
 
     def raise_for_status(self):
         pass
@@ -101,3 +102,49 @@ def test_llm_backend_mit_cache(monkeypatch, tmp_path, retriever):
     b2 = OpenAIKompatibelBackend(base_url="http://x/v1", modell="m2", cache_dir=tmp_path)
     beantworte("Messger\u00e4te pr\u00fcfen", retriever, b2, k=2)
     assert len(aufrufe) == 2
+
+
+def test_llm_backend_wiederholt_bei_verbindungsabbruch(monkeypatch, tmp_path, retriever):
+    import requests
+    import strlrag.antwort as modul
+    from strlrag.antwort import OpenAIKompatibelBackend
+    zustand = {"n": 0}
+
+    def fake_post(url, json, headers, timeout):
+        zustand["n"] += 1
+        if zustand["n"] < 3:
+            raise requests.ConnectionError("weg")
+        return _Antwort("ok [1]")
+
+    monkeypatch.setattr(requests, "post", fake_post)
+    monkeypatch.setattr(modul.time, "sleep", lambda s: None)
+    b = OpenAIKompatibelBackend(base_url="http://x/v1", modell="m")
+    assert beantworte("Messger\u00e4te", retriever, b, k=1).text == "ok [1]"
+    assert zustand["n"] == 3
+
+
+def test_llm_backend_gibt_nach_letztem_versuch_auf(monkeypatch, retriever):
+    import requests
+    import strlrag.antwort as modul
+    from strlrag.antwort import OpenAIKompatibelBackend
+
+    def fake_post(url, json, headers, timeout):
+        raise requests.ConnectionError("weg")
+
+    monkeypatch.setattr(requests, "post", fake_post)
+    monkeypatch.setattr(modul.time, "sleep", lambda s: None)
+    b = OpenAIKompatibelBackend(base_url="http://x/v1", modell="m")
+    with pytest.raises(RuntimeError, match="4 Versuchen"):
+        beantworte("Messger\u00e4te", retriever, b, k=1)
+
+
+@pytest.mark.parametrize("text,erwartet", [
+    ("Dazu finde ich in den Quellen keine Grundlage.", True),
+    ("Dazu finden wir in den Quellen keine Grundlage.", True),
+    ("  Dazu finde ich in den Quellen keine Grundlage. [1] behandelt etwas anderes.", True),
+    ("Der Grenzwert betr\u00e4gt 20 Millisievert [1].", False),
+    ("Laut [1] gilt X; dazu finde ich in den Quellen keine Grundlage f\u00fcr Y.", False),
+])
+def test_ist_enthaltung(text, erwartet):
+    from strlrag.antwort import ist_enthaltung
+    assert ist_enthaltung(text) is erwartet

@@ -18,6 +18,7 @@ korrekt. Der Vorfilter "schwelle" enthaelt sich zusaetzlich, wenn der beste Tref
 """
 
 import argparse
+import gc
 import sys
 import time
 from pathlib import Path
@@ -50,6 +51,18 @@ def baue_backend(name: str, cfg: dict):
 
 def backend_label(name: str, backend) -> str:
     return f"llm:{backend.modell}" if name == "llm" else name
+
+
+class Vorberechnet:
+    """Liefert zuvor abgerufene Treffer, damit das Embedding-Modell vor den Anfragen an das
+    Sprachmodell aus dem Speicher entfernt werden kann (beide zusammen brauchen viel RAM)."""
+
+    def __init__(self, ret, texte, k):
+        self.name = ret.name
+        self.treffer = {t: ret.suche(t, k) for t in texte}
+
+    def suche(self, frage, k=10):
+        return self.treffer[frage][:k]
 
 
 def antworten(ret, fs, backend, k, label):
@@ -149,8 +162,12 @@ def main():
                           "top_quelle": t.chunk.schluessel, "ueber_schwelle": t.score >= schwelle})
         scores[name] = (pos, neg)
 
-        # Antworten je Backend
-        for bname in acfg.get("backends", ["extraktiv"]):
+        # Antworten je Backend; Retrieval vorab, danach Embedding-Modell freigeben
+        backends = acfg.get("backends", ["extraktiv"])
+        if "llm" in backends:
+            ret = Vorberechnet(ret, [f.text for f in fs.fragen] + list(fs.fremd), acfg["k"])
+            gc.collect()
+        for bname in backends:
             backend = baue_backend(bname, acfg)
             label = backend_label(bname, backend)
             an = antworten(ret, fs, backend, acfg["k"], label).assign(retriever=name)
