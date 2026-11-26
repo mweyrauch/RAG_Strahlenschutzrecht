@@ -1,0 +1,17 @@
+# Retrieval: BM25 gegen drei Groessen von multilingual-e5, mit extraktiver Antwort.
+#   python scripts/experimente.py configs/retrieval.yaml
+# Erster Lauf laedt die Modelle (zusammen ca. 3,8 GB); die Korpus-Embeddings werden in
+# data/cache/ zwischengespeichert. "dense" ist e5-large.
+seed: 0
+bootstrap: 2000
+tiefe: 50          # abgerufene Absaetze je Frage fuer die Rangbestimmung
+ks: [1, 5, 10]
+abbildungen: true
+
+referenz: bm25     # Basislinie fuer gepaarte Vergleiche
+retriever: [bm25, "dense:intfloat/multilingual-e5-small", "dense:intfloat/multilingual-e5-base", dense]
+
+antwort:
+  k: 5             # Quellen im Kontext
+  n_saetze: 2      # Saetze der extraktiven Antwort
+  backends: [extraktiv]

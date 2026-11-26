@@ -6,10 +6,9 @@ Backends (jedes hat eine Methode antworte(frage, treffer) -> str):
                          Basislinie und fuer Tests.
 - OpenAIKompatibelBackend: beliebiger Server mit /v1/chat/completions-Schnittstelle
                          (z. B. Ollama, LM Studio, vLLM, OpenAI). Nicht in CI getestet.
-- MockBackend:           feste Antwort, fuer Tests.
 
-Zusaetzlich: Enthaltung bei zu schwachem Retrieval und eine Pruefung, ob die
-im Antworttext zitierten Quellennummern tatsaechlich im Kontext vorkommen.
+Zusaetzlich: Erkennung der Enthaltungsformel und eine Pruefung, ob die im
+Antworttext zitierten Quellennummern tatsaechlich im Kontext vorkommen.
 """
 
 from __future__ import annotations
@@ -98,16 +97,6 @@ class ChatBackend:
 
     def antworte(self, frage, treffer):
         return self.chat(baue_nachrichten(frage, treffer))
-
-
-class MockBackend(ChatBackend):
-    def __init__(self, text: str = "Testantwort [1]."):
-        self.text = text
-        self.letzte_nachrichten: list[dict] | None = None
-
-    def chat(self, nachrichten):
-        self.letzte_nachrichten = nachrichten
-        return self.text
 
 
 class ExtraktivBackend:
@@ -213,11 +202,11 @@ def ist_enthaltung(text: str) -> bool:
     return bool(_ENTHALTUNG.match(falte(text.strip())))
 
 
-def beantworte(frage: str, retriever: Retriever, backend: "ExtraktivBackend | ChatBackend", k: int = 5,
-               min_score: float | None = None) -> Antwort:
-    """Retrieval + Antwort. Bei min_score wird unterhalb der Schwelle enthalten."""
+def beantworte(frage: str, retriever: Retriever, backend: "ExtraktivBackend | ChatBackend",
+               k: int = 5) -> Antwort:
+    """Retrieval + Antwort aus den k besten Absaetzen."""
     treffer = retriever.suche(frage, k)
-    if not treffer or (min_score is not None and treffer[0].score < min_score):
+    if not treffer:
         return Antwort(frage, KEINE_GRUNDLAGE, treffer, enthalten=True)
     text = backend.antworte(frage, treffer)
     return Antwort(frage, text, treffer, enthalten=ist_enthaltung(text))

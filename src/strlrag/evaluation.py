@@ -91,12 +91,6 @@ def mrr(raenge: pd.Series) -> float:
     return float(np.mean(np.where(np.isnan(r), 0.0, 1.0 / np.nan_to_num(r, nan=1.0))))
 
 
-def kennzahlen(df: pd.DataFrame, ks=(1, 3, 5, 10)) -> dict[str, float]:
-    out = {f"recall@{k}": recall_at(df["rang"], k) for k in ks}
-    out["mrr"] = mrr(df["rang"])
-    return out
-
-
 def _wert_je_frage(df: pd.DataFrame, name: str) -> np.ndarray:
     """Beitrag jeder Frage zur Metrik (Metriken sind Mittelwerte ueber Fragen)."""
     r = np.nan_to_num(df["rang"].to_numpy(dtype=float), nan=np.inf)

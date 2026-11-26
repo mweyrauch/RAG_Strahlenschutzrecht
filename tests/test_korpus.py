@@ -1,6 +1,8 @@
 import io
 import zipfile
 
+import pytest
+
 from strlrag.korpus import lese_gesetz, lese_korpus, normiere_bezeichnung
 
 from conftest import FIXTURES
@@ -18,19 +20,9 @@ def test_absaetze_und_listen(korpus):
     assert p2.titel == "Pr\u00fcfintervall"
 
 
-def test_gliederungspfad(korpus):
-    assert korpus[0].gliederung == ["Teil 1 Allgemeines"]
-    assert korpus[1].gliederung == ["Teil 2 Pflichten", "Abschnitt 1 Pr\u00fcfung"]
-
-
 def test_anlage_ohne_p_liest_tabelle(korpus):
     anlage = korpus[-1]
     assert "Temperaturmessung" in anlage.text and "2 Kelvin" in anlage.text
-
-
-def test_ohne_anlagen():
-    v = lese_gesetz(FIXTURES / "testg.xml", mit_anlagen=False)
-    assert all(not x.bezeichnung.startswith("Anlage") for x in v)
 
 
 def test_zip_wird_entpackt(tmp_path):
@@ -42,11 +34,9 @@ def test_zip_wird_entpackt(tmp_path):
     assert len(lese_gesetz(pfad)) == 4
 
 
-def test_doppelte_schluessel_werden_unterschieden():
-    k = lese_korpus([FIXTURES / "testg.xml", FIXTURES / "testg.xml"])
-    s = [v.schluessel for v in k]
-    assert len(s) == len(set(s))
-
+def test_doppelte_schluessel_sind_ein_fehler():
+    with pytest.raises(ValueError, match="Doppelte"):
+        lese_korpus([FIXTURES / "testg.xml", FIXTURES / "testg.xml"])
 
 def test_normiere_bezeichnung():
     assert normiere_bezeichnung("\u00a7  12") == "\u00a7 12"

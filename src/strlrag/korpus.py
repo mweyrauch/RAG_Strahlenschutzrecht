@@ -2,7 +2,8 @@
 
 Jede Datei enthaelt ein <dokumente>-Element mit einer Folge von <norm>-Elementen.
 Eine Norm ist entweder der Mantel (Langtitel), eine Gliederungseinheit
-(Teil, Kapitel, Abschnitt) oder eine Einzelvorschrift mit <enbez> (z. B. Paragraph 78).
+(Teil, Kapitel, Abschnitt; wird uebersprungen) oder eine Einzelvorschrift mit <enbez>
+(z. B. Paragraph 78).
 Absaetze stehen ueblicherweise in je einem <P>-Element innerhalb von <Content>.
 """
 
@@ -21,7 +22,6 @@ class Vorschrift:
     gesetz: str            # z. B. "StrlSchG"
     bezeichnung: str       # z. B. Paragraph 78 oder "Anlage 4"
     titel: str             # z. B. "Grenzwerte fuer beruflich exponierte Personen"
-    gliederung: list[str] = field(default_factory=list)  # Pfad Teil > Kapitel > Abschnitt
     absaetze: list[str] = field(default_factory=list)
 
     @property
@@ -68,15 +68,13 @@ def _xml_aus_quelle(quelle: str | Path | bytes) -> bytes:
     return daten
 
 
-def lese_gesetz(quelle: str | Path | bytes, mit_anlagen: bool = True) -> list[Vorschrift]:
+def lese_gesetz(quelle: str | Path | bytes) -> list[Vorschrift]:
     """Liest ein Gesetz (XML oder ZIP mit XML) und gibt die Einzelvorschriften zurueck.
 
     Weggelassene oder aufgehobene Vorschriften ("(weggefallen)") werden uebersprungen.
     """
     wurzel = ET.fromstring(_xml_aus_quelle(quelle))
     ergebnis: list[Vorschrift] = []
-    # Gliederungsstand: Kennzahl -> Bezeichnung; die Laenge der Kennzahl codiert die Ebene.
-    gliederung: dict[int, str] = {}
     # Die amtliche Abkuerzung (z. B. "StrlSchV" statt "StrlSchV 2018") steht nur im Mantel.
     amtlich = ""
 
@@ -87,25 +85,11 @@ def lese_gesetz(quelle: str | Path | bytes, mit_anlagen: bool = True) -> list[Vo
         amtlich = amtlich or _elementtext(meta.find("amtabk"))
         gesetz = amtlich or _elementtext(meta.find("jurabk"))
 
-        ge = meta.find("gliederungseinheit")
-        if ge is not None:
-            kennzahl = _elementtext(ge.find("gliederungskennzahl"))
-            ebene = max(1, len(kennzahl) // 3)
-            name = " ".join(
-                t for t in (_elementtext(ge.find("gliederungsbez")),
-                            _elementtext(ge.find("gliederungstitel"))) if t
-            )
-            gliederung = {k: v for k, v in gliederung.items() if k < ebene}
-            gliederung[ebene] = name
-            # Eine Gliederungseinheit kann (selten) zugleich eine Vorschrift tragen.
-
         enbez = _elementtext(meta.find("enbez"))
         if not enbez:
             continue
         bezeichnung = normiere_bezeichnung(enbez)
         if bezeichnung.lower() in {"eingangsformel", "inhalts\u00fcbersicht", "inhaltsuebersicht", "schlussformel"}:
-            continue
-        if bezeichnung.lower().startswith("anlage") and not mit_anlagen:
             continue
         titel = _elementtext(meta.find("titel"))
 
@@ -127,24 +111,18 @@ def lese_gesetz(quelle: str | Path | bytes, mit_anlagen: bool = True) -> list[Vo
             gesetz=gesetz,
             bezeichnung=bezeichnung,
             titel=titel,
-            gliederung=[gliederung[k] for k in sorted(gliederung)],
             absaetze=absaetze,
         ))
     return ergebnis
 
 
-def lese_korpus(pfade: list[str | Path], mit_anlagen: bool = True) -> list[Vorschrift]:
+def lese_korpus(pfade: list[str | Path]) -> list[Vorschrift]:
     korpus: list[Vorschrift] = []
     for p in pfade:
-        korpus.extend(lese_gesetz(p, mit_anlagen=mit_anlagen))
+        korpus.extend(lese_gesetz(p))
     schluessel = [v.schluessel for v in korpus]
-    doppelt = {s for s in schluessel if schluessel.count(s) > 1}
+    doppelt = sorted({s for s in schluessel if schluessel.count(s) > 1})
     if doppelt:
-        # Kann bei Anlagen mit Unterteilen vorkommen; Suffix anhaengen statt verwerfen.
-        zaehler: dict[str, int] = {}
-        for v in korpus:
-            if v.schluessel in doppelt:
-                zaehler[v.schluessel] = zaehler.get(v.schluessel, 0) + 1
-                if zaehler[v.schluessel] > 1:
-                    v.bezeichnung = f"{v.bezeichnung} ({zaehler[v.schluessel]})"
+        # Im aktuellen Korpus kommt das nicht vor; die Bewertung setzt eindeutige Schluessel voraus.
+        raise ValueError(f"Doppelte Vorschriften im Korpus: {', '.join(doppelt)}")
     return korpus

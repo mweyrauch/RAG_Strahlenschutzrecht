@@ -29,8 +29,6 @@ def main():
                     help="dense (e5-large), bm25 oder dense:<Modellname>")
     ap.add_argument("-k", type=int, default=5)
     ap.add_argument("--backend", choices=["extraktiv", "llm"], default="extraktiv")
-    ap.add_argument("--min-score", type=float, default=None,
-                    help="Enthaltung, wenn der beste Treffer darunter liegt (skalenabhaengig je Retriever)")
     ap.add_argument("--nur-quellen", action="store_true")
     args = ap.parse_args()
 
@@ -40,7 +38,7 @@ def main():
             print(f"[{i}] {t.score:.3f}  {t.chunk.quelle}\n    {t.chunk.text[:200]}")
         return
     backend = ExtraktivBackend() if args.backend == "extraktiv" else OpenAIKompatibelBackend()
-    a = beantworte(args.frage, ret, backend, k=args.k, min_score=args.min_score)
+    a = beantworte(args.frage, ret, backend, k=args.k)
     print(a.formatiert())
     if a.ungueltige_zitate:
         print(f"\nWarnung: Zitate ohne passende Quelle: {a.ungueltige_zitate}")

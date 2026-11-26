@@ -16,11 +16,11 @@ QUELLEN = {
 }
 
 
-def standardkorpus(roh: Path = ROH, mit_anlagen: bool = True) -> list[Vorschrift]:
+def standardkorpus(roh: Path = ROH) -> list[Vorschrift]:
     pfade = [roh / name for name in QUELLEN]
     fehlend = [p.name for p in pfade if not p.exists()]
     if fehlend:
         raise FileNotFoundError(
             f"Rohdaten fehlen in {roh}: {', '.join(fehlend)}. "
             "Bitte zuerst 'python scripts/lade_korpus.py' ausfuehren.")
-    return lese_korpus(pfade, mit_anlagen=mit_anlagen)
+    return lese_korpus(pfade)

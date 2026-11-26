@@ -4,7 +4,7 @@ import pytest
 
 from strlrag.chunking import Chunk
 from strlrag.evaluation import (auc, auc_bootstrap, bootstrap_differenz, bootstrap_ki,
-                                kennzahlen, lade_fragen, rang_paragraph,
+                                lade_fragen, mrr, recall_at, rang_paragraph,
                                 stichwort_getroffen, werte_retrieval_aus)
 from strlrag.retrieval import Treffer, baue_retriever
 from strlrag.chunking import zerlege
@@ -20,11 +20,11 @@ def test_rang_zaehlt_vorschriften_einmal():
     assert rang_paragraph(treffer, frozenset({"X"})) is None
 
 
-def test_kennzahlen():
+def test_recall_und_mrr():
     df = pd.DataFrame({"rang": [1, 2, None, 5], "item": list("abcd")})
-    k = kennzahlen(df, ks=(1, 3, 5))
-    assert k["recall@1"] == 0.25 and k["recall@3"] == 0.5 and k["recall@5"] == 0.75
-    assert k["mrr"] == pytest.approx((1 + 0.5 + 0 + 0.2) / 4)
+    r = df["rang"]
+    assert recall_at(r, 1) == 0.25 and recall_at(r, 3) == 0.5 and recall_at(r, 5) == 0.75
+    assert mrr(r) == pytest.approx((1 + 0.5 + 0 + 0.2) / 4)
 
 
 def test_bootstrap_intervall_umschliesst_schaetzer():

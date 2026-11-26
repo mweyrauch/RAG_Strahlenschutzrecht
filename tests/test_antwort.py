@@ -1,6 +1,7 @@
 import pytest
 
-from strlrag.antwort import (KEINE_GRUNDLAGE, Antwort, ExtraktivBackend, MockBackend,
+from conftest import MockBackend
+from strlrag.antwort import (KEINE_GRUNDLAGE, Antwort, ExtraktivBackend,
                              baue_nachrichten, beantworte)
 from strlrag.chunking import zerlege
 from strlrag.retrieval import baue_retriever
@@ -23,11 +24,6 @@ def test_extraktiv_zitiert_richtige_quelle(retriever):
 def test_extraktiv_ohne_ueberlappung_enthaelt_sich(retriever):
     a = beantworte("Brot backen", retriever, ExtraktivBackend(), k=2)
     assert a.enthalten
-
-
-def test_enthaltung_unter_schwelle(retriever):
-    a = beantworte("Wie backe ich Brot?", retriever, ExtraktivBackend(), k=3, min_score=0.5)
-    assert a.enthalten and a.text == KEINE_GRUNDLAGE
 
 
 def test_ungueltige_zitate_erkannt(retriever):

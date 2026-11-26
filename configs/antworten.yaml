@@ -1,0 +1,17 @@
+# Antworten: extraktiv gegen ein lokales Sprachmodell, beide mit e5-large.
+#   export LLM_BASE_URL=http://localhost:11434/v1 LLM_MODEL=qwen2.5:7b
+#   python scripts/experimente.py configs/antworten.yaml
+# 95 Anfragen an das Modell; Antworten werden in data/cache/llm/ gespeichert, ein
+# abgebrochener Lauf setzt dort wieder an.
+seed: 0
+bootstrap: 2000
+tiefe: 50
+ks: [1, 5, 10]
+
+referenz: dense
+retriever: [dense]
+
+antwort:
+  k: 5
+  n_saetze: 2
+  backends: [extraktiv, llm]
