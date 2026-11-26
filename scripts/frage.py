@@ -25,7 +25,8 @@ from strlrag.retrieval import baue_retriever  # noqa: E402
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("frage")
-    ap.add_argument("--retriever", default="dense", help="dense (Embeddings) oder bm25")
+    ap.add_argument("--retriever", default="dense",
+                    help="dense (e5-large), bm25 oder dense:<Modellname>")
     ap.add_argument("-k", type=int, default=5)
     ap.add_argument("--backend", choices=["extraktiv", "llm"], default="extraktiv")
     ap.add_argument("--min-score", type=float, default=None,

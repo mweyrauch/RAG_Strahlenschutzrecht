@@ -2,6 +2,7 @@
 
 - Gibt es jede Soll-Vorschrift im Korpus?
 - Steht jedes Stichwort woertlich (nach Umlautfaltung) in mindestens einer Soll-Vorschrift?
+- Steht mindestens ein Antwortmuster je Item im Wortlaut?
 - Kommen Item-IDs doppelt vor?
 Beendet sich mit Fehlercode 1, wenn etwas nicht stimmt.
 """
@@ -31,6 +32,10 @@ def main():
         for w in e.get("stichworte", []):
             if not stichwort_getroffen(texte, (w,)):
                 fehler.append(f"{e['id']}: Stichwort '{w}' steht in keiner Soll-Vorschrift")
+        # Mindestens ein Antwortmuster muss im Wortlaut stehen; weitere duerfen Umformulierungen sein
+        muster = e.get("antwort_muster", [])
+        if muster and not stichwort_getroffen(texte, tuple(muster)):
+            fehler.append(f"{e['id']}: kein Antwortmuster steht in einer Soll-Vorschrift")
     print(f"{len(daten['fragen'])} Items, {len(daten.get('fremd', []))} Fremdfragen geprueft")
     for f in fehler:
         print("FEHLER", f)

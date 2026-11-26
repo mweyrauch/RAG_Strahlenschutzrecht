@@ -1,0 +1,16 @@
+# Vergleich der Embedding-Modelle (Grundlage fuer die Wahl von e5-large, siehe README).
+# Erster Lauf laedt die Modelle: e5-small ca. 470 MB, e5-base ca. 1,1 GB, e5-large ca. 2,2 GB.
+#   python scripts/experimente.py --config configs/experimente_modelle.yaml \
+#          --aus ergebnisse_modelle --abbildungen docs/abbildungen_modelle
+seed: 0
+bootstrap: 2000
+tiefe: 50
+ks: [1, 5, 10]
+
+referenz: "dense:intfloat/multilingual-e5-small"
+retriever: [bm25, "dense:intfloat/multilingual-e5-small", "dense:intfloat/multilingual-e5-base", dense]
+
+antwort:
+  k: 5
+  n_saetze: 2
+  backends: [extraktiv]

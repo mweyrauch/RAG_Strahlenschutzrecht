@@ -13,3 +13,4 @@ retriever: [bm25, dense]
 antwort:
   k: 5             # Quellen im Kontext
   n_saetze: 2      # extraktive Basislinie
+  backends: [extraktiv]

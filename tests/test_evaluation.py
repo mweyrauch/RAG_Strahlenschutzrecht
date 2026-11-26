@@ -75,3 +75,20 @@ def test_lade_fragen_und_auswertung(tmp_path, korpus):
     r = baue_retriever("bm25").fit(zerlege(korpus))
     df = werte_retrieval_aus(r, fs.fragen)
     assert df.loc[0, "rang"] == 1
+
+
+def test_bootstrap_mittelwert():
+    from strlrag.evaluation import bootstrap_mittelwert
+    p, lo, hi = bootstrap_mittelwert([1, 0, 1, 1], ["a", "a", "b", "c"], n=300)
+    assert p == 0.75 and lo <= p <= hi
+
+
+def test_muster_standard_und_eigen(tmp_path):
+    pfad = tmp_path / "f.yaml"
+    pfad.write_text(
+        "fragen:\n"
+        "  - {id: q1, fach: a, soll: [X], stichworte: [s1]}\n"
+        "  - {id: q2, fach: b, soll: [X], stichworte: [s2], antwort_muster: [m1, m2]}\n",
+        encoding="utf-8")
+    f = lade_fragen(pfad).fragen
+    assert f[0].muster == ("s1",) and f[1].muster == ("m1", "m2")

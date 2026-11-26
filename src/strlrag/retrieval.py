@@ -87,14 +87,16 @@ class BM25Retriever(Retriever):
 class DenseRetriever(Retriever):
     """Embedding-Retriever. Benoetigt das Paket sentence-transformers.
 
-    Standardmodell: intfloat/multilingual-e5-small. E5-Modelle erwarten die Praefixe
+    Standardmodell: intfloat/multilingual-e5-large (ca. 2,2 GB, 1024 Dimensionen, hoechstens
+    512 Tokens je Text). Im Vergleich mit e5-small und e5-base war es bei alltagssprachlichen
+    Fragen deutlich besser (siehe README). E5-Modelle erwarten die Praefixe
     "query: " und "passage: "; fuer andere Modelle bleiben sie leer, sofern nicht
     ausdruecklich angegeben. Die Embeddings des Korpus werden in cache_dir
     zwischengespeichert (Schluessel: Modell, Praefix und alle Texte), damit wiederholte Laeufe
     den Korpus nicht erneut kodieren.
     """
 
-    def __init__(self, modell: str = "intfloat/multilingual-e5-small",
+    def __init__(self, modell: str = "intfloat/multilingual-e5-large",
                  frage_praefix: str | None = None, text_praefix: str | None = None,
                  cache_dir: str | Path | None = None, batch_size: int = 32):
         e5 = "e5" in modell.lower()
@@ -103,7 +105,7 @@ class DenseRetriever(Retriever):
         self.text_praefix = text_praefix if text_praefix is not None else ("passage: " if e5 else "")
         self.cache_dir = Path(cache_dir) if cache_dir else None
         self.batch_size = batch_size
-        self.name = "dense" if modell == "intfloat/multilingual-e5-small" else f"dense:{modell}"
+        self.name = "dense" if modell == "intfloat/multilingual-e5-large" else f"dense:{modell}"
 
     def _cache_pfad(self, texte: list[str]) -> Path | None:
         if self.cache_dir is None:
@@ -148,11 +150,4 @@ def baue_retriever(name: str, **kw) -> Retriever:
             kw.setdefault("modell", name.split(":", 1)[1])
         kw.setdefault("cache_dir", _CACHE)
         return DenseRetriever(**kw)
-    if name.startswith("umformuliert:"):
-        # z. B. "umformuliert:bm25": Anfrage zusaetzlich von einem Sprachmodell umformulieren lassen
-        from .anfrage import UmformulierRetriever
-        from .antwort import OpenAIKompatibelBackend
-        r = UmformulierRetriever(baue_retriever(name.split(":", 1)[1]), OpenAIKompatibelBackend())
-        r.name = name
-        return r
     raise ValueError(f"Unbekannter Retriever: {name}")

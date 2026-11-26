@@ -15,13 +15,16 @@ import numpy as np  # noqa: E402
 FARBE = {
     "bm25": "#F4B6C2",
     "dense": "#9EC5E8",
-    "umformuliert:dense": "#FFC9A3",
+    "dense:intfloat/multilingual-e5-small": "#C3B1E1",
+    "dense:intfloat/multilingual-e5-base": "#FFC9A3",
 }
-MARKER = {"bm25": "D", "dense": "o", "umformuliert:dense": "^"}
+MARKER = {"bm25": "D", "dense": "o", "dense:intfloat/multilingual-e5-small": "s",
+          "dense:intfloat/multilingual-e5-base": "^"}
 NAME = {
     "bm25": "BM25 (Basislinie)",
-    "dense": "Embeddings (multilingual-e5-small)",
-    "umformuliert:dense": "Embeddings + Umformulierung",
+    "dense": "Embeddings e5-large",
+    "dense:intfloat/multilingual-e5-small": "Embeddings e5-small",
+    "dense:intfloat/multilingual-e5-base": "Embeddings e5-base",
 }
 RESERVE = ["#F7D794", "#B5EAEA", "#D9C2A7"]
 STIL = {"fach": "Fachsprachliche Fragen", "alltag": "Alltagssprachliche Fragen"}

@@ -14,9 +14,12 @@ im Antworttext zitierten Quellennummern tatsaechlich im Kontext vorkommen.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -58,8 +61,25 @@ class Antwort:
         return "\n".join(zeilen).rstrip()
 
 
-def kontext_block(treffer: list[Treffer]) -> str:
-    return "\n\n".join(f"[{i}] {t.chunk.quelle}\n{t.chunk.text}" for i, t in enumerate(treffer, start=1))
+MAX_WOERTER_JE_QUELLE = 250
+
+
+def _kuerze(text: str, max_woerter: int | None) -> str:
+    woerter = text.split()
+    if max_woerter is None or len(woerter) <= max_woerter:
+        return text
+    return " ".join(woerter[:max_woerter]) + " [...]"
+
+
+def kontext_block(treffer: list[Treffer], max_woerter: int | None = MAX_WOERTER_JE_QUELLE) -> str:
+    """Nummerierte Quellen fuer den Prompt.
+
+    Sehr lange Absaetze (v. a. Tabellen in Anlagen) werden gekuerzt, damit der Prompt in
+    das Kontextfenster kleiner lokaler Modelle passt; sonst schneidet z. B. Ollama den
+    Anfang des Prompts mitsamt Anweisungen stillschweigend ab.
+    """
+    return "\n\n".join(f"[{i}] {t.chunk.quelle}\n{_kuerze(t.chunk.text, max_woerter)}"
+                       for i, t in enumerate(treffer, start=1))
 
 
 def baue_nachrichten(frage: str, treffer: list[Treffer]) -> list[dict]:
@@ -126,18 +146,33 @@ class OpenAIKompatibelBackend(ChatBackend):
     """Ruft einen Chat-Completions-Endpunkt auf.
 
     Umgebungsvariablen: LLM_BASE_URL (Standard http://localhost:11434/v1 fuer Ollama),
-    LLM_MODEL, LLM_API_KEY (optional).
+    LLM_MODEL, LLM_API_KEY (optional), LLM_TIMEOUT (Sekunden, Standard 600).
+    Mit cache_dir werden Antworten je (Modell, Temperatur, Nachrichten) als JSON gespeichert,
+    sodass abgebrochene oder wiederholte Laeufe das Modell nicht erneut fragen.
     """
 
     def __init__(self, base_url: str | None = None, modell: str | None = None,
-                 api_key: str | None = None, temperatur: float = 0.0, timeout: float = 120):
+                 api_key: str | None = None, temperatur: float = 0.0,
+                 timeout: float | None = None, cache_dir: str | Path | None = None):
         self.base_url = (base_url or os.environ.get("LLM_BASE_URL", "http://localhost:11434/v1")).rstrip("/")
-        self.modell = modell or os.environ.get("LLM_MODEL", "llama3.1:8b")
+        self.modell = modell or os.environ.get("LLM_MODEL", "qwen2.5:7b")
         self.api_key = api_key or os.environ.get("LLM_API_KEY", "")
         self.temperatur = temperatur
-        self.timeout = timeout
+        self.timeout = timeout or float(os.environ.get("LLM_TIMEOUT", "600"))
+        self.cache_dir = Path(cache_dir) if cache_dir else None
+        self.anfragen = 0  # tatsaechliche Aufrufe des Servers (ohne Cache-Treffer)
 
-    def chat(self, nachrichten):  # pragma: no cover - braucht Netzwerk
+    def _cache_pfad(self, nachrichten) -> Path | None:
+        if self.cache_dir is None:
+            return None
+        schluessel = json.dumps({"modell": self.modell, "temperatur": self.temperatur,
+                                 "nachrichten": nachrichten}, ensure_ascii=False, sort_keys=True)
+        return self.cache_dir / f"llm_{hashlib.sha256(schluessel.encode('utf-8')).hexdigest()[:24]}.json"
+
+    def chat(self, nachrichten):
+        pfad = self._cache_pfad(nachrichten)
+        if pfad is not None and pfad.exists():
+            return json.loads(pfad.read_text(encoding="utf-8"))["antwort"]
         import requests
 
         kopf = {"Content-Type": "application/json"}
@@ -150,7 +185,13 @@ class OpenAIKompatibelBackend(ChatBackend):
             headers=kopf, timeout=self.timeout,
         )
         r.raise_for_status()
-        return r.json()["choices"][0]["message"]["content"].strip()
+        self.anfragen += 1
+        text = r.json()["choices"][0]["message"]["content"].strip()
+        if pfad is not None:
+            pfad.parent.mkdir(parents=True, exist_ok=True)
+            pfad.write_text(json.dumps({"modell": self.modell, "antwort": text}, ensure_ascii=False),
+                            encoding="utf-8")
+        return text
 
 
 def beantworte(frage: str, retriever: Retriever, backend: Backend, k: int = 5,
@@ -160,4 +201,5 @@ def beantworte(frage: str, retriever: Retriever, backend: Backend, k: int = 5,
     if not treffer or (min_score is not None and treffer[0].score < min_score):
         return Antwort(frage, KEINE_GRUNDLAGE, treffer, enthalten=True)
     text = backend.antworte(frage, treffer)
-    return Antwort(frage, text, treffer, enthalten=text.strip() == KEINE_GRUNDLAGE)
+    # Modelle haengen an die Enthaltungsformel oft noch eine Begruendung an
+    return Antwort(frage, text, treffer, enthalten=text.strip().startswith(KEINE_GRUNDLAGE))

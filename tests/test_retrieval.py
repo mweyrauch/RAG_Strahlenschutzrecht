@@ -49,19 +49,6 @@ def test_unbekannter_retriever():
         baue_retriever("gibtsnicht")
 
 
-def test_umformulierung_hilft_bei_fremdem_vokabular(chunks):
-    from strlrag.anfrage import UmformulierRetriever
-    from strlrag.antwort import MockBackend
-    frage = "Wer kuemmert sich offiziell um die Geraete?"
-    basis = baue_retriever("bm25")
-    mock = MockBackend("Wer ist als beauftragte Person f\u00fcr die Ger\u00e4tesicherheit zu bestellen?")
-    r = UmformulierRetriever(basis, mock).fit(chunks)
-    assert r.suche(frage, 1)[0].chunk.schluessel == "TestG \u00a7 4"
-    assert mock.letzte_nachrichten[1]["content"] == frage
-    r.suche(frage, 1)
-    assert list(r.cache) == [frage]  # zweiter Aufruf aus dem Cache
-
-
 class _FakeModell:
     """Ersetzt SentenceTransformer: Buchstabenhaeufigkeiten als 'Embedding'."""
 

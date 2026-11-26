@@ -4,7 +4,10 @@
 #   fach:   nah am Wortlaut des Gesetzes (geschrieben nach Lektüre der Vorschrift)
 #   alltag: so, wie eine fachfremde Person fragen würde, bewusst ohne die Begriffe der Vorschrift
 # soll:       Vorschriften, in denen die Antwort steht (Paragraphenebene, Bezeichnung wie im Korpus)
-# stichworte: kurze Textstellen, die eine korrekte Antwort enthalten muss (wörtlich aus der Vorschrift)
+# stichworte: kurze Textstellen, die die Antwort belegen (wörtlich aus der Vorschrift, automatisch geprüft)
+# antwort_muster: Formen, an denen eine korrekte Antwort erkannt wird (z. B. "20 mSv" neben
+#             "20 Millisievert"); eine Antwort gilt als korrekt, wenn mindestens eines vorkommt.
+#             Bewusst kurz gehalten, weil Sprachmodelle den Wortlaut umformulieren.
 #
 # Stand der Prüfung: Soll-Vorschriften und Stichworte wurden gegen die XML-Fassung von
 # gesetze-im-internet.de geprüft (StrlSchG Stand 02.11.2026, StrlSchV Stand 05.08.2025);
@@ -19,6 +22,7 @@ fragen:
     alltag: Wie viel Strahlung darf ich als Beschäftigter pro Jahr höchstens abbekommen?
     soll: [StrlSchG § 78]
     stichworte: [20 Millisievert im Kalenderjahr]
+    antwort_muster: ["20 Millisievert", "20 mSv"]
 
   - id: q02
     thema: Dosisgrenzwerte
@@ -26,6 +30,7 @@ fragen:
     alltag: Wie viel Strahlung darf man über das ganze Arbeitsleben zusammengerechnet bekommen?
     soll: [StrlSchG § 77]
     stichworte: [400 Millisievert]
+    antwort_muster: ["400 Millisievert", "400 mSv"]
 
   - id: q03
     thema: Dosisgrenzwerte
@@ -33,6 +38,7 @@ fragen:
     alltag: Wie viel zusätzliche Strahlung aus einer Anlage in der Nachbarschaft darf ein Anwohner pro Jahr abbekommen?
     soll: [StrlSchG § 80]
     stichworte: [1 Millisievert im Kalenderjahr]
+    antwort_muster: ["1 Millisievert", "1 mSv", "ein Millisievert", "einen Millisievert"]
 
   - id: q04
     thema: Dosisgrenzwerte
@@ -40,6 +46,7 @@ fragen:
     alltag: Wie viel Strahlung dürfen meine Augen bei der Arbeit pro Jahr abbekommen?
     soll: [StrlSchG § 78]
     stichworte: [für die Augenlinse 20 Millisievert]
+    antwort_muster: ["20 Millisievert", "20 mSv"]
 
   - id: q05
     thema: Dosisgrenzwerte
@@ -47,6 +54,7 @@ fragen:
     alltag: Wie viel Strahlung darf ein 17-jähriger Azubi im Jahr abbekommen?
     soll: [StrlSchG § 78]
     stichworte: [unter 18 Jahren beträgt der Grenzwert der effektiven Dosis 1 Millisievert]
+    antwort_muster: ["1 Millisievert", "1 mSv", "ein Millisievert", "einen Millisievert"]
 
   - id: q06
     thema: Dosisgrenzwerte
@@ -54,6 +62,7 @@ fragen:
     alltag: Ich bin schwanger und arbeite mit Strahlung. Wie viel darf mein Baby abbekommen?
     soll: [StrlSchG § 78]
     stichworte: [bis zu deren Ende 1 Millisievert]
+    antwort_muster: ["1 Millisievert", "1 mSv", "ein Millisievert", "einen Millisievert"]
 
   - id: q07
     thema: Radon
@@ -61,6 +70,7 @@ fragen:
     alltag: Ab wie viel Radon in meiner Wohnung sollte ich etwas unternehmen?
     soll: [StrlSchG § 124]
     stichworte: [300 Becquerel je Kubikmeter]
+    antwort_muster: ["300 Becquerel", "300 Bq"]
 
   - id: q08
     thema: Radon
@@ -68,6 +78,7 @@ fragen:
     alltag: Wie viel von dem Gas aus dem Boden ist in einem Kellerbüro noch in Ordnung?
     soll: [StrlSchG § 126]
     stichworte: [300 Becquerel je Kubikmeter]
+    antwort_muster: ["300 Becquerel", "300 Bq"]
 
   - id: q09
     thema: Radon
@@ -75,6 +86,7 @@ fragen:
     alltag: Muss mein Chef im Kellerbüro messen lassen, ob dort zu viel Radon ist?
     soll: [StrlSchG § 127]
     stichworte: [18 Monaten]
+    antwort_muster: ["18 Monate"]
 
   - id: q10
     thema: Radon
@@ -82,6 +94,7 @@ fragen:
     alltag: Wie lange dauert so eine Radonmessung?
     soll: [StrlSchV § 155]
     stichworte: [Gesamtdauer von zwölf Monaten]
+    antwort_muster: ["zwölf Monate", "12 Monate"]
 
   - id: q11
     thema: Organisation
@@ -89,6 +102,7 @@ fragen:
     alltag: Wie wird man offiziell zur Person, die im Betrieb auf den Strahlenschutz aufpasst?
     soll: [StrlSchG § 70]
     stichworte: [unverzüglich schriftlich zu bestellen]
+    antwort_muster: ["schriftlich"]
 
   - id: q12
     thema: Organisation
@@ -96,13 +110,15 @@ fragen:
     alltag: Kann mich mein Arbeitgeber rauswerfen, weil ich beim Strahlenschutz zu streng bin?
     soll: [StrlSchG § 70]
     stichworte: [Kündigung des Arbeitsverhältnisses unzulässig]
+    antwort_muster: ["unzulässig", "nicht zulässig", "nicht gekündigt", "Kündigungsschutz"]
 
   - id: q13
     thema: Organisation
     fach: Wer ist Strahlenschutzverantwortlicher?
     alltag: Wer trägt im Unternehmen am Ende die rechtliche Verantwortung dafür, dass mit Strahlung sicher gearbeitet wird?
     soll: [StrlSchG § 69]
-    stichworte: [Strahlenschutzverantwortlicher ist, wer]
+    stichworte: ["Strahlenschutzverantwortlicher ist, wer"]
+    antwort_muster: ["Genehmigung", "Anzeige"]
 
   - id: q14
     thema: Fachkunde
@@ -110,6 +126,7 @@ fragen:
     alltag: Wie oft muss ich meinen Strahlenschutzkurs auffrischen?
     soll: [StrlSchV § 48]
     stichworte: [mindestens alle fünf Jahre]
+    antwort_muster: ["fünf Jahre", "5 Jahre"]
 
   - id: q15
     thema: Unterweisung
@@ -117,6 +134,7 @@ fragen:
     alltag: Wie oft muss ich zur Sicherheitsbelehrung, wenn ich mit radioaktiven Quellen arbeite?
     soll: [StrlSchV § 63]
     stichworte: [mindestens einmal im Jahr]
+    antwort_muster: ["einmal im Jahr", "jährlich"]
 
   - id: q16
     thema: Unterweisung
@@ -124,6 +142,7 @@ fragen:
     alltag: Wie lange muss der Zettel mit meiner Unterschrift von der Belehrung aufgehoben werden?
     soll: [StrlSchV § 63]
     stichworte: [fünf Jahre]
+    antwort_muster: ["fünf Jahre", "5 Jahre"]
 
   - id: q17
     thema: Berufliche Exposition
@@ -131,13 +150,15 @@ fragen:
     alltag: Ab wann gilt man als besonders stark belasteter Strahlenarbeiter?
     soll: [StrlSchV § 71]
     stichworte: [mehr als 6 Millisievert]
+    antwort_muster: ["6 Millisievert", "6 mSv", "sechs Millisievert"]
 
   - id: q18
     thema: Strahlenschutzbereiche
     fach: Ab welcher effektiven Dosis im Kalenderjahr ist ein Kontrollbereich einzurichten?
     alltag: Ab wann muss ein Raum mit Strahlung als besonders überwachte Zone abgegrenzt werden?
     soll: [StrlSchV § 52]
-    stichworte: [Kontrollbereich, wenn Personen im Kalenderjahr eine effektive Dosis von mehr als 6 Millisievert]
+    stichworte: ["Kontrollbereich, wenn Personen im Kalenderjahr eine effektive Dosis von mehr als 6 Millisievert"]
+    antwort_muster: ["6 Millisievert", "6 mSv", "sechs Millisievert"]
 
   - id: q19
     thema: Strahlenschutzbereiche
@@ -145,6 +166,7 @@ fragen:
     alltag: Ab welcher Strahlung pro Stunde darf ein Bereich praktisch nicht mehr betreten werden?
     soll: [StrlSchV § 52]
     stichworte: [3 Millisievert durch Stunde]
+    antwort_muster: ["3 Millisievert durch Stunde", "3 Millisievert pro Stunde", "3 Millisievert je Stunde", "3 mSv/h", "3 mSv pro Stunde"]
 
   - id: q20
     thema: Ärztliche Überwachung
@@ -152,6 +174,7 @@ fragen:
     alltag: Wie oft muss ich zum Betriebsarzt, wenn ich viel mit Strahlung arbeite?
     soll: [StrlSchV § 77]
     stichworte: [innerhalb eines Jahres nach der letzten Untersuchung]
+    antwort_muster: ["innerhalb eines Jahres", "jährlich", "einmal im Jahr", "zwölf Monate", "12 Monate"]
 
   - id: q21
     thema: Strahlenquellen
@@ -159,6 +182,7 @@ fragen:
     alltag: Wie oft muss eine sehr starke Strahlenquelle darauf geprüft werden, ob sie leckt?
     soll: [StrlSchV § 89]
     stichworte: [mindestens einmal jährlich]
+    antwort_muster: ["jährlich", "einmal im Jahr"]
 
   - id: q22
     thema: Freigabe
@@ -166,6 +190,7 @@ fragen:
     alltag: Wann darf leicht radioaktives Material aus dem Rückbau wie normaler Abfall behandelt werden?
     soll: [StrlSchV § 31]
     stichworte: [10 Mikrosievert im Kalenderjahr]
+    antwort_muster: ["10 Mikrosievert", "10 µSv", "10 μSv"]
 
   - id: q23
     thema: Ordnungswidrigkeiten
@@ -173,6 +198,7 @@ fragen:
     alltag: Wie teuer kann es werden, wenn eine Firma gegen die Regeln zum Schutz vor Strahlung verstößt?
     soll: [StrlSchG § 194]
     stichworte: [fünfzigtausend Euro]
+    antwort_muster: ["fünfzigtausend Euro", "50.000 Euro", "50 000 Euro", "50000 Euro"]
 
   - id: q24
     thema: Notfallschutz
@@ -180,6 +206,7 @@ fragen:
     alltag: Wie viel Strahlung darf ein Feuerwehrmann bei einem Atomunfall abbekommen?
     soll: [StrlSchG § 114]
     stichworte: [100 Millisievert]
+    antwort_muster: ["100 Millisievert", "100 mSv"]
 
   - id: q25
     thema: Notfallschutz
@@ -187,6 +214,7 @@ fragen:
     alltag: Wie viel Strahlung wird den Menschen nach einem Reaktorunfall im ersten Jahr noch zugemutet?
     soll: [StrlSchG § 93]
     stichworte: [Referenzwert von 100 Millisievert]
+    antwort_muster: ["100 Millisievert", "100 mSv"]
 
   - id: q26
     thema: Notfallschutz
@@ -194,6 +222,7 @@ fragen:
     alltag: Wer besorgt im Ernstfall die Jodtabletten?
     soll: [StrlSchG § 104]
     stichworte: [radioaktiven Jods]
+    antwort_muster: ["Jod"]
 
   - id: q27
     thema: Verlust und Fund
@@ -201,6 +230,7 @@ fragen:
     alltag: Uns ist ein radioaktives Präparat verloren gegangen. Wen muss ich informieren?
     soll: [StrlSchV § 167]
     stichworte: [Polizeibehörde]
+    antwort_muster: ["Polizei", "Aufsichtsbehörde"]
 
   - id: q28
     thema: Verlust und Fund
@@ -208,6 +238,7 @@ fragen:
     alltag: Ich habe auf dem Dachboden meines Opas ein strahlendes Fläschchen entdeckt. Was muss ich tun?
     soll: [StrlSchV § 168]
     stichworte: [unverzüglich]
+    antwort_muster: ["unverzüglich", "sofort"]
 
   - id: q29
     thema: Kennzeichnung
@@ -215,6 +246,7 @@ fragen:
     alltag: Welche Farben hat das Warnschild für Radioaktivität?
     soll: [StrlSchV Anlage 10]
     stichworte: ["Untergrund: gelb"]
+    antwort_muster: ["gelb"]
 
   - id: q30
     thema: Rechtfertigung
@@ -222,6 +254,7 @@ fragen:
     alltag: Darf ein Installateur radioaktive Stoffe benutzen, um ein Leck in der Heizung zu finden?
     soll: [StrlSchV Anlage 1, StrlSchV § 2]
     stichworte: [Leckagesuche]
+    antwort_muster: ["Leckagesuche", "Überspannungsableiter", "Glasuren", "Tritium"]
 
   - id: q31
     thema: Begriffe
@@ -229,6 +262,7 @@ fragen:
     alltag: Was zählt rechtlich eigentlich als Strahlenunfall mit ernsten Folgen?
     soll: [StrlSchG § 5]
     stichworte: [erhebliche nachteilige Auswirkungen]
+    antwort_muster: ["erhebliche nachteilige Auswirkungen", "erheblichen nachteiligen Auswirkungen"]
 
   - id: q32
     thema: Begriffe
@@ -236,6 +270,7 @@ fragen:
     alltag: Ist ein Richtwert für Strahlung dasselbe wie eine Obergrenze, die man nie überschreiten darf?
     soll: [StrlSchG § 5]
     stichworte: [Ein Referenzwert ist kein Grenzwert]
+    antwort_muster: ["kein Grenzwert", "keinen Grenzwert", "nicht um einen Grenzwert"]
 
   - id: q33
     thema: Buchführung
@@ -243,6 +278,7 @@ fragen:
     alltag: Bis wann muss ich dem Amt melden, welche strahlenden Präparate wir zum Jahreswechsel im Labor haben?
     soll: [StrlSchV § 85]
     stichworte: [31. Januar]
+    antwort_muster: ["31. Januar", "31.01."]
 
   - id: q34
     thema: Röntgen
@@ -250,6 +286,7 @@ fragen:
     alltag: Darf ich ein Röntgengerät einfach in einem normalen Büro aufstellen?
     soll: [StrlSchV § 60]
     stichworte: [nur in einem Röntgenraum betrieben]
+    antwort_muster: ["Röntgenraum", "Röntgenräumen"]
 
   - id: q35
     thema: Haftung
@@ -257,6 +294,7 @@ fragen:
     alltag: Wer zahlt, wenn jemand durch radioaktive Strahlung zu Schaden kommt?
     soll: [StrlSchG § 176]
     stichworte: [Atomgesetzes]
+    antwort_muster: ["Atomgesetz"]
 
   - id: q36
     thema: Mutterschutz
@@ -264,6 +302,7 @@ fragen:
     alltag: Ich stille noch. Darf ich weiter im Isotopenlabor arbeiten?
     soll: [StrlSchV § 69]
     stichworte: [innere berufliche Exposition ausgeschlossen]
+    antwort_muster: ["innere berufliche Exposition", "innere Exposition"]
 
   - id: q37
     thema: Dosisgrenzwerte
@@ -271,6 +310,7 @@ fragen:
     alltag: Wie viel darf jemand insgesamt abbekommen, der ausnahmsweise eine besonders gefährliche Reparatur übernimmt?
     soll: [StrlSchV § 74]
     stichworte: [Grenzwert der effektiven Dosis 100 Millisievert]
+    antwort_muster: ["100 Millisievert", "100 mSv"]
 
   - id: q38
     thema: Medizin
@@ -278,6 +318,7 @@ fragen:
     alltag: Muss bei einer Strahlentherapie ein Physiker dabei sein?
     soll: [StrlSchV § 131]
     stichworte: [Bestrahlungsplan]
+    antwort_muster: ["Bestrahlungsplan"]
 
   - id: q39
     thema: Luftfahrt
@@ -285,6 +326,7 @@ fragen:
     alltag: Muss eine Fluggesellschaft dem Amt melden, dass ihre Crews Höhenstrahlung abbekommen?
     soll: [StrlSchG § 50]
     stichworte: [vier Wochen]
+    antwort_muster: ["vier Wochen", "4 Wochen"]
 
   - id: q40
     thema: Register
@@ -292,6 +334,7 @@ fragen:
     alltag: Wo wird zentral gespeichert, wie viel Strahlung ich im Laufe meines Berufslebens abbekommen habe?
     soll: [StrlSchG § 170]
     stichworte: [Bundesamt für Strahlenschutz]
+    antwort_muster: ["Bundesamt für Strahlenschutz", "BfS"]
 
 # Fragen, die der Korpus nicht beantwortet (für die Enthaltung). Einige liegen bewusst nah am Thema
 # (nichtionisierende Strahlung, andere Beauftragte, andere Grenzwerte).

@@ -55,3 +55,49 @@ def test_nachrichten_ohne_treffer():
 def test_mock_text_gleich_keine_grundlage_ist_enthaltung(retriever):
     a = beantworte("Messger\u00e4te", retriever, MockBackend(KEINE_GRUNDLAGE), k=1)
     assert isinstance(a, Antwort) and a.enthalten
+
+
+def test_enthaltung_mit_angehaengter_begruendung(retriever):
+    a = beantworte("Messger\u00e4te", retriever,
+                   MockBackend(KEINE_GRUNDLAGE + " Die Quellen [1] behandeln etwas anderes."), k=1)
+    assert a.enthalten
+
+
+def test_lange_quellen_werden_im_prompt_gekuerzt(retriever):
+    from strlrag.antwort import kontext_block
+    t = retriever.suche("Messger\u00e4te pr\u00fcfen", 1)
+    voll = kontext_block(t, max_woerter=None)
+    kurz = kontext_block(t, max_woerter=3)
+    assert kurz.endswith("[...]") and len(kurz) < len(voll)
+
+
+class _Antwort:
+    def __init__(self, text):
+        self.text = text
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return {"choices": [{"message": {"content": self.text}}]}
+
+
+def test_llm_backend_mit_cache(monkeypatch, tmp_path, retriever):
+    import requests
+    from strlrag.antwort import OpenAIKompatibelBackend
+    aufrufe = []
+
+    def fake_post(url, json, headers, timeout):
+        aufrufe.append((url, json["model"]))
+        return _Antwort(" Antwort [1]. ")
+
+    monkeypatch.setattr(requests, "post", fake_post)
+    b = OpenAIKompatibelBackend(base_url="http://x/v1", modell="m", cache_dir=tmp_path)
+    a1 = beantworte("Messger\u00e4te pr\u00fcfen", retriever, b, k=2)
+    a2 = beantworte("Messger\u00e4te pr\u00fcfen", retriever, b, k=2)
+    assert a1.text == a2.text == "Antwort [1]."
+    assert aufrufe == [("http://x/v1/chat/completions", "m")] and b.anfragen == 1
+    # anderes Modell -> eigener Cache-Eintrag
+    b2 = OpenAIKompatibelBackend(base_url="http://x/v1", modell="m2", cache_dir=tmp_path)
+    beantworte("Messger\u00e4te pr\u00fcfen", retriever, b2, k=2)
+    assert len(aufrufe) == 2

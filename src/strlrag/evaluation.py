@@ -31,6 +31,7 @@ class Frage:
     soll: frozenset[str]
     stichworte: tuple[str, ...] = ()
     thema: str = ""
+    muster: tuple[str, ...] = ()   # akzeptierte Antwortformen, z. B. "20 mSv"; Standard: stichworte
 
 
 @dataclass
@@ -49,6 +50,7 @@ def lade_fragen(pfad: str | Path) -> Fragenset:
                     id=f"{e['id']}-{stil}", item=e["id"], stil=stil, text=e[stil],
                     soll=frozenset(e["soll"]), stichworte=tuple(e.get("stichworte", [])),
                     thema=e.get("thema", ""),
+                    muster=tuple(e.get("antwort_muster") or e.get("stichworte", [])),
                 ))
     return Fragenset(fragen, list(daten.get("fremd", [])))
 
@@ -117,6 +119,15 @@ def _cluster_bootstrap(werte: np.ndarray, items: np.ndarray, n: int, seed: int) 
     rng = np.random.default_rng(seed)
     zieh = rng.integers(0, len(eindeutig), size=(n, len(eindeutig)))
     return summe[zieh].sum(axis=1) / anzahl[zieh].sum(axis=1)
+
+
+def bootstrap_mittelwert(werte, items, n: int = 2000, seed: int = 0,
+                         alpha: float = 0.05) -> tuple[float, float, float]:
+    """Mittelwert und Perzentil-Intervall fuer beliebige Werte je Frage (Cluster: items)."""
+    w = np.asarray(werte, dtype=float)
+    b = _cluster_bootstrap(w, np.asarray(items), n, seed)
+    lo, hi = np.quantile(b, [alpha / 2, 1 - alpha / 2])
+    return float(w.mean()), float(lo), float(hi)
 
 
 def bootstrap_ki(df: pd.DataFrame, metrik: str, n: int = 2000, seed: int = 0,
