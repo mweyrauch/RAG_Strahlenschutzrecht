@@ -154,7 +154,7 @@ tests/           48 Tests auf einem synthetischen Testgesetz
   zählen einmal. Bootstrap über Items mit 2.000 Ziehungen, Vergleiche gepaart.
 - **Fragenset:** Je Item Soll-Vorschriften, ein wörtliches Stichwort und kurze Antwortmuster.
   `pruefe_fragen.py` prüft, dass Stichwort und mindestens ein Muster in der Soll-Vorschrift stehen;
-  ein wöchentlicher CI-Job wiederholt das gegen die aktuelle Gesetzesfassung.
+  nach einer Gesetzesänderung sollte es mit frisch geladenen Texten erneut laufen.
 
 ## Grenzen
 
